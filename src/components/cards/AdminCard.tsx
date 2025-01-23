@@ -44,15 +44,14 @@ export default function AdminCard({ unit, isAction, name }: AdminCardProps) {
     const shortid2 = unit.id.split('-')[4];
     setShortId(shortid1 + '-' + shortid2);
     getImg();
-  }, []);
+  }, [unit]);
 
   async function getImg() {
     try {
       if (!unit?.id) return;
-      const { blob } = await fetchFileFromS3(unit?.id, 'partApproval');
-      if (!blob) return;
+      const { blob } = await fetchFileFromS3(unit?.id, 'partApprovalImg');
+      if (!blob) return; 
       const url = window.URL.createObjectURL(blob);
-      if (!url) return;
       setUrl(url);
     } catch (error) {
       console.error('Error fetching image', error);
