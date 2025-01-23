@@ -8,6 +8,96 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateAdministrador = /* GraphQL */ `subscription OnCreateAdministrador(
+  $filter: ModelSubscriptionAdministradorFilterInput
+) {
+  onCreateAdministrador(filter: $filter) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateAdministradorSubscriptionVariables,
+  APITypes.OnCreateAdministradorSubscription
+>;
+export const onUpdateAdministrador = /* GraphQL */ `subscription OnUpdateAdministrador(
+  $filter: ModelSubscriptionAdministradorFilterInput
+) {
+  onUpdateAdministrador(filter: $filter) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateAdministradorSubscriptionVariables,
+  APITypes.OnUpdateAdministradorSubscription
+>;
+export const onDeleteAdministrador = /* GraphQL */ `subscription OnDeleteAdministrador(
+  $filter: ModelSubscriptionAdministradorFilterInput
+) {
+  onDeleteAdministrador(filter: $filter) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteAdministradorSubscriptionVariables,
+  APITypes.OnDeleteAdministradorSubscription
+>;
+export const onCreateContador = /* GraphQL */ `subscription OnCreateContador($filter: ModelSubscriptionContadorFilterInput) {
+  onCreateContador(filter: $filter) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateContadorSubscriptionVariables,
+  APITypes.OnCreateContadorSubscription
+>;
+export const onUpdateContador = /* GraphQL */ `subscription OnUpdateContador($filter: ModelSubscriptionContadorFilterInput) {
+  onUpdateContador(filter: $filter) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateContadorSubscriptionVariables,
+  APITypes.OnUpdateContadorSubscription
+>;
+export const onDeleteContador = /* GraphQL */ `subscription OnDeleteContador($filter: ModelSubscriptionContadorFilterInput) {
+  onDeleteContador(filter: $filter) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteContadorSubscriptionVariables,
+  APITypes.OnDeleteContadorSubscription
+>;
 export const onCreateProvider = /* GraphQL */ `subscription OnCreateProvider($filter: ModelSubscriptionProviderFilterInput) {
   onCreateProvider(filter: $filter) {
     id

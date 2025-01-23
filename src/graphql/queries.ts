@@ -8,6 +8,78 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getAdministrador = /* GraphQL */ `query GetAdministrador($id: ID!) {
+  getAdministrador(id: $id) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetAdministradorQueryVariables,
+  APITypes.GetAdministradorQuery
+>;
+export const listAdministradors = /* GraphQL */ `query ListAdministradors(
+  $filter: ModelAdministradorFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAdministradors(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      emails
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListAdministradorsQueryVariables,
+  APITypes.ListAdministradorsQuery
+>;
+export const getContador = /* GraphQL */ `query GetContador($id: ID!) {
+  getContador(id: $id) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetContadorQueryVariables,
+  APITypes.GetContadorQuery
+>;
+export const listContadors = /* GraphQL */ `query ListContadors(
+  $filter: ModelContadorFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listContadors(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      emails
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListContadorsQueryVariables,
+  APITypes.ListContadorsQuery
+>;
 export const getProvider = /* GraphQL */ `query GetProvider($id: ID!) {
   getProvider(id: $id) {
     id

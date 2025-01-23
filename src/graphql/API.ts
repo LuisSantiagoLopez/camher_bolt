@@ -2,20 +2,22 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateProviderInput = {
+export type CreateAdministradorInput = {
   id?: string | null,
   emails?: Array< string | null > | null,
   name?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
 };
 
-export type ModelProviderConditionInput = {
+export type ModelAdministradorConditionInput = {
   emails?: ModelStringInput | null,
   name?: ModelStringInput | null,
-  and?: Array< ModelProviderConditionInput | null > | null,
-  or?: Array< ModelProviderConditionInput | null > | null,
-  not?: ModelProviderConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+  and?: Array< ModelAdministradorConditionInput | null > | null,
+  or?: Array< ModelAdministradorConditionInput | null > | null,
+  not?: ModelAdministradorConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -56,6 +58,82 @@ export type ModelSizeInput = {
   ge?: number | null,
   gt?: number | null,
   between?: Array< number | null > | null,
+};
+
+export type Administrador = {
+  __typename: "Administrador",
+  id: string,
+  emails?: Array< string | null > | null,
+  name?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateAdministradorInput = {
+  id: string,
+  emails?: Array< string | null > | null,
+  name?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type DeleteAdministradorInput = {
+  id: string,
+};
+
+export type CreateContadorInput = {
+  id?: string | null,
+  emails?: Array< string | null > | null,
+  name?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type ModelContadorConditionInput = {
+  emails?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelContadorConditionInput | null > | null,
+  or?: Array< ModelContadorConditionInput | null > | null,
+  not?: ModelContadorConditionInput | null,
+};
+
+export type Contador = {
+  __typename: "Contador",
+  id: string,
+  emails?: Array< string | null > | null,
+  name?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateContadorInput = {
+  id: string,
+  emails?: Array< string | null > | null,
+  name?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type DeleteContadorInput = {
+  id: string,
+};
+
+export type CreateProviderInput = {
+  id?: string | null,
+  emails?: Array< string | null > | null,
+  name?: string | null,
+};
+
+export type ModelProviderConditionInput = {
+  emails?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  and?: Array< ModelProviderConditionInput | null > | null,
+  or?: Array< ModelProviderConditionInput | null > | null,
+  not?: ModelProviderConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type Provider = {
@@ -351,6 +429,40 @@ export type DeleteTableInput = {
   id: string,
 };
 
+export type ModelAdministradorFilterInput = {
+  id?: ModelIDInput | null,
+  emails?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelAdministradorFilterInput | null > | null,
+  or?: Array< ModelAdministradorFilterInput | null > | null,
+  not?: ModelAdministradorFilterInput | null,
+};
+
+export type ModelAdministradorConnection = {
+  __typename: "ModelAdministradorConnection",
+  items:  Array<Administrador | null >,
+  nextToken?: string | null,
+};
+
+export type ModelContadorFilterInput = {
+  id?: ModelIDInput | null,
+  emails?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelContadorFilterInput | null > | null,
+  or?: Array< ModelContadorFilterInput | null > | null,
+  not?: ModelContadorFilterInput | null,
+};
+
+export type ModelContadorConnection = {
+  __typename: "ModelContadorConnection",
+  items:  Array<Contador | null >,
+  nextToken?: string | null,
+};
+
 export type ModelProviderFilterInput = {
   id?: ModelIDInput | null,
   emails?: ModelStringInput | null,
@@ -427,14 +539,14 @@ export type ModelTableConnection = {
   nextToken?: string | null,
 };
 
-export type ModelSubscriptionProviderFilterInput = {
+export type ModelSubscriptionAdministradorFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   emails?: ModelSubscriptionStringInput | null,
   name?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionProviderFilterInput | null > | null,
-  or?: Array< ModelSubscriptionProviderFilterInput | null > | null,
+  and?: Array< ModelSubscriptionAdministradorFilterInput | null > | null,
+  or?: Array< ModelSubscriptionAdministradorFilterInput | null > | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -465,6 +577,26 @@ export type ModelSubscriptionStringInput = {
   beginsWith?: string | null,
   in?: Array< string | null > | null,
   notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionContadorFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  emails?: ModelSubscriptionStringInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionContadorFilterInput | null > | null,
+  or?: Array< ModelSubscriptionContadorFilterInput | null > | null,
+};
+
+export type ModelSubscriptionProviderFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  emails?: ModelSubscriptionStringInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionProviderFilterInput | null > | null,
+  or?: Array< ModelSubscriptionProviderFilterInput | null > | null,
 };
 
 export type ModelSubscriptionUnitFilterInput = {
@@ -515,6 +647,102 @@ export type ModelSubscriptionTableFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionTableFilterInput | null > | null,
   or?: Array< ModelSubscriptionTableFilterInput | null > | null,
+};
+
+export type CreateAdministradorMutationVariables = {
+  input: CreateAdministradorInput,
+  condition?: ModelAdministradorConditionInput | null,
+};
+
+export type CreateAdministradorMutation = {
+  createAdministrador?:  {
+    __typename: "Administrador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateAdministradorMutationVariables = {
+  input: UpdateAdministradorInput,
+  condition?: ModelAdministradorConditionInput | null,
+};
+
+export type UpdateAdministradorMutation = {
+  updateAdministrador?:  {
+    __typename: "Administrador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteAdministradorMutationVariables = {
+  input: DeleteAdministradorInput,
+  condition?: ModelAdministradorConditionInput | null,
+};
+
+export type DeleteAdministradorMutation = {
+  deleteAdministrador?:  {
+    __typename: "Administrador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateContadorMutationVariables = {
+  input: CreateContadorInput,
+  condition?: ModelContadorConditionInput | null,
+};
+
+export type CreateContadorMutation = {
+  createContador?:  {
+    __typename: "Contador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateContadorMutationVariables = {
+  input: UpdateContadorInput,
+  condition?: ModelContadorConditionInput | null,
+};
+
+export type UpdateContadorMutation = {
+  updateContador?:  {
+    __typename: "Contador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteContadorMutationVariables = {
+  input: DeleteContadorInput,
+  condition?: ModelContadorConditionInput | null,
+};
+
+export type DeleteContadorMutation = {
+  deleteContador?:  {
+    __typename: "Contador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
 };
 
 export type CreateProviderMutationVariables = {
@@ -2383,6 +2611,78 @@ export type DeleteTableMutation = {
   } | null,
 };
 
+export type GetAdministradorQueryVariables = {
+  id: string,
+};
+
+export type GetAdministradorQuery = {
+  getAdministrador?:  {
+    __typename: "Administrador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListAdministradorsQueryVariables = {
+  filter?: ModelAdministradorFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListAdministradorsQuery = {
+  listAdministradors?:  {
+    __typename: "ModelAdministradorConnection",
+    items:  Array< {
+      __typename: "Administrador",
+      id: string,
+      emails?: Array< string | null > | null,
+      name?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetContadorQueryVariables = {
+  id: string,
+};
+
+export type GetContadorQuery = {
+  getContador?:  {
+    __typename: "Contador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListContadorsQueryVariables = {
+  filter?: ModelContadorFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListContadorsQuery = {
+  listContadors?:  {
+    __typename: "ModelContadorConnection",
+    items:  Array< {
+      __typename: "Contador",
+      id: string,
+      emails?: Array< string | null > | null,
+      name?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetProviderQueryVariables = {
   id: string,
 };
@@ -4057,6 +4357,96 @@ export type TablesByStatusQuery = {
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreateAdministradorSubscriptionVariables = {
+  filter?: ModelSubscriptionAdministradorFilterInput | null,
+};
+
+export type OnCreateAdministradorSubscription = {
+  onCreateAdministrador?:  {
+    __typename: "Administrador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateAdministradorSubscriptionVariables = {
+  filter?: ModelSubscriptionAdministradorFilterInput | null,
+};
+
+export type OnUpdateAdministradorSubscription = {
+  onUpdateAdministrador?:  {
+    __typename: "Administrador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteAdministradorSubscriptionVariables = {
+  filter?: ModelSubscriptionAdministradorFilterInput | null,
+};
+
+export type OnDeleteAdministradorSubscription = {
+  onDeleteAdministrador?:  {
+    __typename: "Administrador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateContadorSubscriptionVariables = {
+  filter?: ModelSubscriptionContadorFilterInput | null,
+};
+
+export type OnCreateContadorSubscription = {
+  onCreateContador?:  {
+    __typename: "Contador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateContadorSubscriptionVariables = {
+  filter?: ModelSubscriptionContadorFilterInput | null,
+};
+
+export type OnUpdateContadorSubscription = {
+  onUpdateContador?:  {
+    __typename: "Contador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteContadorSubscriptionVariables = {
+  filter?: ModelSubscriptionContadorFilterInput | null,
+};
+
+export type OnDeleteContadorSubscription = {
+  onDeleteContador?:  {
+    __typename: "Contador",
+    id: string,
+    emails?: Array< string | null > | null,
+    name?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 

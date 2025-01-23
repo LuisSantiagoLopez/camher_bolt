@@ -18,12 +18,47 @@ export const createAdministrador = /* GraphQL */ `mutation CreateAdministrador(
     name
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.CreateAdministradorMutationVariables,
   APITypes.CreateAdministradorMutation
 >;
-
+export const updateAdministrador = /* GraphQL */ `mutation UpdateAdministrador(
+  $input: UpdateAdministradorInput!
+  $condition: ModelAdministradorConditionInput
+) {
+  updateAdministrador(input: $input, condition: $condition) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateAdministradorMutationVariables,
+  APITypes.UpdateAdministradorMutation
+>;
+export const deleteAdministrador = /* GraphQL */ `mutation DeleteAdministrador(
+  $input: DeleteAdministradorInput!
+  $condition: ModelAdministradorConditionInput
+) {
+  deleteAdministrador(input: $input, condition: $condition) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteAdministradorMutationVariables,
+  APITypes.DeleteAdministradorMutation
+>;
 export const createContador = /* GraphQL */ `mutation CreateContador(
   $input: CreateContadorInput!
   $condition: ModelContadorConditionInput
@@ -34,12 +69,47 @@ export const createContador = /* GraphQL */ `mutation CreateContador(
     name
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.CreateContadorMutationVariables,
   APITypes.CreateContadorMutation
 >;
-
+export const updateContador = /* GraphQL */ `mutation UpdateContador(
+  $input: UpdateContadorInput!
+  $condition: ModelContadorConditionInput
+) {
+  updateContador(input: $input, condition: $condition) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateContadorMutationVariables,
+  APITypes.UpdateContadorMutation
+>;
+export const deleteContador = /* GraphQL */ `mutation DeleteContador(
+  $input: DeleteContadorInput!
+  $condition: ModelContadorConditionInput
+) {
+  deleteContador(input: $input, condition: $condition) {
+    id
+    emails
+    name
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteContadorMutationVariables,
+  APITypes.DeleteContadorMutation
+>;
 export const createProvider = /* GraphQL */ `mutation CreateProvider(
   $input: CreateProviderInput!
   $condition: ModelProviderConditionInput
@@ -52,26 +122,99 @@ export const createProvider = /* GraphQL */ `mutation CreateProvider(
       items {
         id
         unitID
+        Unit {
+          id
+          Parts {
+            nextToken
+            __typename
+          }
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
         providerID
+        Provider {
+          id
+          emails
+          name
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         tableID
+        Table {
+          id
+          from
+          to
+          type
+          status
+          customFile
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         status
+        failureReport {
+          problemLocation
+          operator
+          description
+          __typename
+        }
+        workOrder {
+          jobToBeDone
+          personInCharge
+          sparePart
+          observation
+          __typename
+        }
+        mechanicReview {
+          mechanic
+          __typename
+        }
+        partReq {
+          partDescription
+          price
+          unitaryPrice
+          quantity
+          isCash
+          isImportant
+          __typename
+        }
+        invoiceInfo {
+          subTotal
+          date
+          number
+          __typename
+        }
         reqDate
         partApprovalImg
         counterRecieptImg
         invoiceImg
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.CreateProviderMutationVariables,
   APITypes.CreateProviderMutation
 >;
-
 export const updateProvider = /* GraphQL */ `mutation UpdateProvider(
   $input: UpdateProviderInput!
   $condition: ModelProviderConditionInput
@@ -84,26 +227,99 @@ export const updateProvider = /* GraphQL */ `mutation UpdateProvider(
       items {
         id
         unitID
+        Unit {
+          id
+          Parts {
+            nextToken
+            __typename
+          }
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
         providerID
+        Provider {
+          id
+          emails
+          name
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         tableID
+        Table {
+          id
+          from
+          to
+          type
+          status
+          customFile
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         status
+        failureReport {
+          problemLocation
+          operator
+          description
+          __typename
+        }
+        workOrder {
+          jobToBeDone
+          personInCharge
+          sparePart
+          observation
+          __typename
+        }
+        mechanicReview {
+          mechanic
+          __typename
+        }
+        partReq {
+          partDescription
+          price
+          unitaryPrice
+          quantity
+          isCash
+          isImportant
+          __typename
+        }
+        invoiceInfo {
+          subTotal
+          date
+          number
+          __typename
+        }
         reqDate
         partApprovalImg
         counterRecieptImg
         invoiceImg
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.UpdateProviderMutationVariables,
   APITypes.UpdateProviderMutation
 >;
-
 export const deleteProvider = /* GraphQL */ `mutation DeleteProvider(
   $input: DeleteProviderInput!
   $condition: ModelProviderConditionInput
@@ -116,119 +332,411 @@ export const deleteProvider = /* GraphQL */ `mutation DeleteProvider(
       items {
         id
         unitID
+        Unit {
+          id
+          Parts {
+            nextToken
+            __typename
+          }
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
         providerID
+        Provider {
+          id
+          emails
+          name
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         tableID
+        Table {
+          id
+          from
+          to
+          type
+          status
+          customFile
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         status
+        failureReport {
+          problemLocation
+          operator
+          description
+          __typename
+        }
+        workOrder {
+          jobToBeDone
+          personInCharge
+          sparePart
+          observation
+          __typename
+        }
+        mechanicReview {
+          mechanic
+          __typename
+        }
+        partReq {
+          partDescription
+          price
+          unitaryPrice
+          quantity
+          isCash
+          isImportant
+          __typename
+        }
+        invoiceInfo {
+          subTotal
+          date
+          number
+          __typename
+        }
         reqDate
         partApprovalImg
         counterRecieptImg
         invoiceImg
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.DeleteProviderMutationVariables,
   APITypes.DeleteProviderMutation
 >;
-
 export const createUnit = /* GraphQL */ `mutation CreateUnit(
   $input: CreateUnitInput!
   $condition: ModelUnitConditionInput
 ) {
   createUnit(input: $input, condition: $condition) {
     id
-    name
     Parts {
       items {
         id
         unitID
+        Unit {
+          id
+          Parts {
+            nextToken
+            __typename
+          }
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
         providerID
+        Provider {
+          id
+          emails
+          name
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         tableID
+        Table {
+          id
+          from
+          to
+          type
+          status
+          customFile
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         status
+        failureReport {
+          problemLocation
+          operator
+          description
+          __typename
+        }
+        workOrder {
+          jobToBeDone
+          personInCharge
+          sparePart
+          observation
+          __typename
+        }
+        mechanicReview {
+          mechanic
+          __typename
+        }
+        partReq {
+          partDescription
+          price
+          unitaryPrice
+          quantity
+          isCash
+          isImportant
+          __typename
+        }
+        invoiceInfo {
+          subTotal
+          date
+          number
+          __typename
+        }
         reqDate
         partApprovalImg
         counterRecieptImg
         invoiceImg
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
+    name
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.CreateUnitMutationVariables,
   APITypes.CreateUnitMutation
 >;
-
 export const updateUnit = /* GraphQL */ `mutation UpdateUnit(
   $input: UpdateUnitInput!
   $condition: ModelUnitConditionInput
 ) {
   updateUnit(input: $input, condition: $condition) {
     id
-    name
     Parts {
       items {
         id
         unitID
+        Unit {
+          id
+          Parts {
+            nextToken
+            __typename
+          }
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
         providerID
+        Provider {
+          id
+          emails
+          name
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         tableID
+        Table {
+          id
+          from
+          to
+          type
+          status
+          customFile
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         status
+        failureReport {
+          problemLocation
+          operator
+          description
+          __typename
+        }
+        workOrder {
+          jobToBeDone
+          personInCharge
+          sparePart
+          observation
+          __typename
+        }
+        mechanicReview {
+          mechanic
+          __typename
+        }
+        partReq {
+          partDescription
+          price
+          unitaryPrice
+          quantity
+          isCash
+          isImportant
+          __typename
+        }
+        invoiceInfo {
+          subTotal
+          date
+          number
+          __typename
+        }
         reqDate
         partApprovalImg
         counterRecieptImg
         invoiceImg
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
+    name
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.UpdateUnitMutationVariables,
   APITypes.UpdateUnitMutation
 >;
-
 export const deleteUnit = /* GraphQL */ `mutation DeleteUnit(
   $input: DeleteUnitInput!
   $condition: ModelUnitConditionInput
 ) {
   deleteUnit(input: $input, condition: $condition) {
     id
-    name
     Parts {
       items {
         id
         unitID
+        Unit {
+          id
+          Parts {
+            nextToken
+            __typename
+          }
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
         providerID
+        Provider {
+          id
+          emails
+          name
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         tableID
+        Table {
+          id
+          from
+          to
+          type
+          status
+          customFile
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         status
+        failureReport {
+          problemLocation
+          operator
+          description
+          __typename
+        }
+        workOrder {
+          jobToBeDone
+          personInCharge
+          sparePart
+          observation
+          __typename
+        }
+        mechanicReview {
+          mechanic
+          __typename
+        }
+        partReq {
+          partDescription
+          price
+          unitaryPrice
+          quantity
+          isCash
+          isImportant
+          __typename
+        }
+        invoiceInfo {
+          subTotal
+          date
+          number
+          __typename
+        }
         reqDate
         partApprovalImg
         counterRecieptImg
         invoiceImg
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
+    name
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.DeleteUnitMutationVariables,
   APITypes.DeleteUnitMutation
 >;
-
 export const createPart = /* GraphQL */ `mutation CreatePart(
   $input: CreatePartInput!
   $condition: ModelPartConditionInput
@@ -238,12 +746,86 @@ export const createPart = /* GraphQL */ `mutation CreatePart(
     unitID
     Unit {
       id
-      name
       Parts {
+        items {
+          id
+          unitID
+          Unit {
+            id
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          providerID
+          Provider {
+            id
+            emails
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          tableID
+          Table {
+            id
+            from
+            to
+            type
+            status
+            customFile
+            createdAt
+            updatedAt
+            __typename
+          }
+          status
+          failureReport {
+            problemLocation
+            operator
+            description
+            __typename
+          }
+          workOrder {
+            jobToBeDone
+            personInCharge
+            sparePart
+            observation
+            __typename
+          }
+          mechanicReview {
+            mechanic
+            __typename
+          }
+          partReq {
+            partDescription
+            price
+            unitaryPrice
+            quantity
+            isCash
+            isImportant
+            __typename
+          }
+          invoiceInfo {
+            subTotal
+            date
+            number
+            __typename
+          }
+          reqDate
+          partApprovalImg
+          counterRecieptImg
+          invoiceImg
+          createdAt
+          updatedAt
+          __typename
+        }
         nextToken
+        __typename
       }
+      name
       createdAt
       updatedAt
+      __typename
     }
     providerID
     Provider {
@@ -251,10 +833,84 @@ export const createPart = /* GraphQL */ `mutation CreatePart(
       emails
       name
       Parts {
+        items {
+          id
+          unitID
+          Unit {
+            id
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          providerID
+          Provider {
+            id
+            emails
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          tableID
+          Table {
+            id
+            from
+            to
+            type
+            status
+            customFile
+            createdAt
+            updatedAt
+            __typename
+          }
+          status
+          failureReport {
+            problemLocation
+            operator
+            description
+            __typename
+          }
+          workOrder {
+            jobToBeDone
+            personInCharge
+            sparePart
+            observation
+            __typename
+          }
+          mechanicReview {
+            mechanic
+            __typename
+          }
+          partReq {
+            partDescription
+            price
+            unitaryPrice
+            quantity
+            isCash
+            isImportant
+            __typename
+          }
+          invoiceInfo {
+            subTotal
+            date
+            number
+            __typename
+          }
+          reqDate
+          partApprovalImg
+          counterRecieptImg
+          invoiceImg
+          createdAt
+          updatedAt
+          __typename
+        }
         nextToken
+        __typename
       }
       createdAt
       updatedAt
+      __typename
     }
     tableID
     Table {
@@ -265,25 +921,102 @@ export const createPart = /* GraphQL */ `mutation CreatePart(
       status
       customFile
       Parts {
+        items {
+          id
+          unitID
+          Unit {
+            id
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          providerID
+          Provider {
+            id
+            emails
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          tableID
+          Table {
+            id
+            from
+            to
+            type
+            status
+            customFile
+            createdAt
+            updatedAt
+            __typename
+          }
+          status
+          failureReport {
+            problemLocation
+            operator
+            description
+            __typename
+          }
+          workOrder {
+            jobToBeDone
+            personInCharge
+            sparePart
+            observation
+            __typename
+          }
+          mechanicReview {
+            mechanic
+            __typename
+          }
+          partReq {
+            partDescription
+            price
+            unitaryPrice
+            quantity
+            isCash
+            isImportant
+            __typename
+          }
+          invoiceInfo {
+            subTotal
+            date
+            number
+            __typename
+          }
+          reqDate
+          partApprovalImg
+          counterRecieptImg
+          invoiceImg
+          createdAt
+          updatedAt
+          __typename
+        }
         nextToken
+        __typename
       }
       createdAt
       updatedAt
+      __typename
     }
     status
     failureReport {
       problemLocation
       operator
       description
+      __typename
     }
     workOrder {
       jobToBeDone
       personInCharge
       sparePart
       observation
+      __typename
     }
     mechanicReview {
       mechanic
+      __typename
     }
     partReq {
       partDescription
@@ -292,11 +1025,13 @@ export const createPart = /* GraphQL */ `mutation CreatePart(
       quantity
       isCash
       isImportant
+      __typename
     }
     invoiceInfo {
       subTotal
       date
       number
+      __typename
     }
     reqDate
     partApprovalImg
@@ -304,12 +1039,13 @@ export const createPart = /* GraphQL */ `mutation CreatePart(
     invoiceImg
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.CreatePartMutationVariables,
   APITypes.CreatePartMutation
 >;
-
 export const updatePart = /* GraphQL */ `mutation UpdatePart(
   $input: UpdatePartInput!
   $condition: ModelPartConditionInput
@@ -319,12 +1055,86 @@ export const updatePart = /* GraphQL */ `mutation UpdatePart(
     unitID
     Unit {
       id
-      name
       Parts {
+        items {
+          id
+          unitID
+          Unit {
+            id
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          providerID
+          Provider {
+            id
+            emails
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          tableID
+          Table {
+            id
+            from
+            to
+            type
+            status
+            customFile
+            createdAt
+            updatedAt
+            __typename
+          }
+          status
+          failureReport {
+            problemLocation
+            operator
+            description
+            __typename
+          }
+          workOrder {
+            jobToBeDone
+            personInCharge
+            sparePart
+            observation
+            __typename
+          }
+          mechanicReview {
+            mechanic
+            __typename
+          }
+          partReq {
+            partDescription
+            price
+            unitaryPrice
+            quantity
+            isCash
+            isImportant
+            __typename
+          }
+          invoiceInfo {
+            subTotal
+            date
+            number
+            __typename
+          }
+          reqDate
+          partApprovalImg
+          counterRecieptImg
+          invoiceImg
+          createdAt
+          updatedAt
+          __typename
+        }
         nextToken
+        __typename
       }
+      name
       createdAt
       updatedAt
+      __typename
     }
     providerID
     Provider {
@@ -332,10 +1142,84 @@ export const updatePart = /* GraphQL */ `mutation UpdatePart(
       emails
       name
       Parts {
+        items {
+          id
+          unitID
+          Unit {
+            id
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          providerID
+          Provider {
+            id
+            emails
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          tableID
+          Table {
+            id
+            from
+            to
+            type
+            status
+            customFile
+            createdAt
+            updatedAt
+            __typename
+          }
+          status
+          failureReport {
+            problemLocation
+            operator
+            description
+            __typename
+          }
+          workOrder {
+            jobToBeDone
+            personInCharge
+            sparePart
+            observation
+            __typename
+          }
+          mechanicReview {
+            mechanic
+            __typename
+          }
+          partReq {
+            partDescription
+            price
+            unitaryPrice
+            quantity
+            isCash
+            isImportant
+            __typename
+          }
+          invoiceInfo {
+            subTotal
+            date
+            number
+            __typename
+          }
+          reqDate
+          partApprovalImg
+          counterRecieptImg
+          invoiceImg
+          createdAt
+          updatedAt
+          __typename
+        }
         nextToken
+        __typename
       }
       createdAt
       updatedAt
+      __typename
     }
     tableID
     Table {
@@ -346,25 +1230,102 @@ export const updatePart = /* GraphQL */ `mutation UpdatePart(
       status
       customFile
       Parts {
+        items {
+          id
+          unitID
+          Unit {
+            id
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          providerID
+          Provider {
+            id
+            emails
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          tableID
+          Table {
+            id
+            from
+            to
+            type
+            status
+            customFile
+            createdAt
+            updatedAt
+            __typename
+          }
+          status
+          failureReport {
+            problemLocation
+            operator
+            description
+            __typename
+          }
+          workOrder {
+            jobToBeDone
+            personInCharge
+            sparePart
+            observation
+            __typename
+          }
+          mechanicReview {
+            mechanic
+            __typename
+          }
+          partReq {
+            partDescription
+            price
+            unitaryPrice
+            quantity
+            isCash
+            isImportant
+            __typename
+          }
+          invoiceInfo {
+            subTotal
+            date
+            number
+            __typename
+          }
+          reqDate
+          partApprovalImg
+          counterRecieptImg
+          invoiceImg
+          createdAt
+          updatedAt
+          __typename
+        }
         nextToken
+        __typename
       }
       createdAt
       updatedAt
+      __typename
     }
     status
     failureReport {
       problemLocation
       operator
       description
+      __typename
     }
     workOrder {
       jobToBeDone
       personInCharge
       sparePart
       observation
+      __typename
     }
     mechanicReview {
       mechanic
+      __typename
     }
     partReq {
       partDescription
@@ -373,11 +1334,13 @@ export const updatePart = /* GraphQL */ `mutation UpdatePart(
       quantity
       isCash
       isImportant
+      __typename
     }
     invoiceInfo {
       subTotal
       date
       number
+      __typename
     }
     reqDate
     partApprovalImg
@@ -385,12 +1348,13 @@ export const updatePart = /* GraphQL */ `mutation UpdatePart(
     invoiceImg
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.UpdatePartMutationVariables,
   APITypes.UpdatePartMutation
 >;
-
 export const deletePart = /* GraphQL */ `mutation DeletePart(
   $input: DeletePartInput!
   $condition: ModelPartConditionInput
@@ -400,12 +1364,86 @@ export const deletePart = /* GraphQL */ `mutation DeletePart(
     unitID
     Unit {
       id
-      name
       Parts {
+        items {
+          id
+          unitID
+          Unit {
+            id
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          providerID
+          Provider {
+            id
+            emails
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          tableID
+          Table {
+            id
+            from
+            to
+            type
+            status
+            customFile
+            createdAt
+            updatedAt
+            __typename
+          }
+          status
+          failureReport {
+            problemLocation
+            operator
+            description
+            __typename
+          }
+          workOrder {
+            jobToBeDone
+            personInCharge
+            sparePart
+            observation
+            __typename
+          }
+          mechanicReview {
+            mechanic
+            __typename
+          }
+          partReq {
+            partDescription
+            price
+            unitaryPrice
+            quantity
+            isCash
+            isImportant
+            __typename
+          }
+          invoiceInfo {
+            subTotal
+            date
+            number
+            __typename
+          }
+          reqDate
+          partApprovalImg
+          counterRecieptImg
+          invoiceImg
+          createdAt
+          updatedAt
+          __typename
+        }
         nextToken
+        __typename
       }
+      name
       createdAt
       updatedAt
+      __typename
     }
     providerID
     Provider {
@@ -413,10 +1451,84 @@ export const deletePart = /* GraphQL */ `mutation DeletePart(
       emails
       name
       Parts {
+        items {
+          id
+          unitID
+          Unit {
+            id
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          providerID
+          Provider {
+            id
+            emails
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          tableID
+          Table {
+            id
+            from
+            to
+            type
+            status
+            customFile
+            createdAt
+            updatedAt
+            __typename
+          }
+          status
+          failureReport {
+            problemLocation
+            operator
+            description
+            __typename
+          }
+          workOrder {
+            jobToBeDone
+            personInCharge
+            sparePart
+            observation
+            __typename
+          }
+          mechanicReview {
+            mechanic
+            __typename
+          }
+          partReq {
+            partDescription
+            price
+            unitaryPrice
+            quantity
+            isCash
+            isImportant
+            __typename
+          }
+          invoiceInfo {
+            subTotal
+            date
+            number
+            __typename
+          }
+          reqDate
+          partApprovalImg
+          counterRecieptImg
+          invoiceImg
+          createdAt
+          updatedAt
+          __typename
+        }
         nextToken
+        __typename
       }
       createdAt
       updatedAt
+      __typename
     }
     tableID
     Table {
@@ -427,25 +1539,102 @@ export const deletePart = /* GraphQL */ `mutation DeletePart(
       status
       customFile
       Parts {
+        items {
+          id
+          unitID
+          Unit {
+            id
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          providerID
+          Provider {
+            id
+            emails
+            name
+            createdAt
+            updatedAt
+            __typename
+          }
+          tableID
+          Table {
+            id
+            from
+            to
+            type
+            status
+            customFile
+            createdAt
+            updatedAt
+            __typename
+          }
+          status
+          failureReport {
+            problemLocation
+            operator
+            description
+            __typename
+          }
+          workOrder {
+            jobToBeDone
+            personInCharge
+            sparePart
+            observation
+            __typename
+          }
+          mechanicReview {
+            mechanic
+            __typename
+          }
+          partReq {
+            partDescription
+            price
+            unitaryPrice
+            quantity
+            isCash
+            isImportant
+            __typename
+          }
+          invoiceInfo {
+            subTotal
+            date
+            number
+            __typename
+          }
+          reqDate
+          partApprovalImg
+          counterRecieptImg
+          invoiceImg
+          createdAt
+          updatedAt
+          __typename
+        }
         nextToken
+        __typename
       }
       createdAt
       updatedAt
+      __typename
     }
     status
     failureReport {
       problemLocation
       operator
       description
+      __typename
     }
     workOrder {
       jobToBeDone
       personInCharge
       sparePart
       observation
+      __typename
     }
     mechanicReview {
       mechanic
+      __typename
     }
     partReq {
       partDescription
@@ -454,11 +1643,13 @@ export const deletePart = /* GraphQL */ `mutation DeletePart(
       quantity
       isCash
       isImportant
+      __typename
     }
     invoiceInfo {
       subTotal
       date
       number
+      __typename
     }
     reqDate
     partApprovalImg
@@ -466,12 +1657,13 @@ export const deletePart = /* GraphQL */ `mutation DeletePart(
     invoiceImg
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.DeletePartMutationVariables,
   APITypes.DeletePartMutation
 >;
-
 export const createTable = /* GraphQL */ `mutation CreateTable(
   $input: CreateTableInput!
   $condition: ModelTableConditionInput
@@ -487,26 +1679,99 @@ export const createTable = /* GraphQL */ `mutation CreateTable(
       items {
         id
         unitID
+        Unit {
+          id
+          Parts {
+            nextToken
+            __typename
+          }
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
         providerID
+        Provider {
+          id
+          emails
+          name
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         tableID
+        Table {
+          id
+          from
+          to
+          type
+          status
+          customFile
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         status
+        failureReport {
+          problemLocation
+          operator
+          description
+          __typename
+        }
+        workOrder {
+          jobToBeDone
+          personInCharge
+          sparePart
+          observation
+          __typename
+        }
+        mechanicReview {
+          mechanic
+          __typename
+        }
+        partReq {
+          partDescription
+          price
+          unitaryPrice
+          quantity
+          isCash
+          isImportant
+          __typename
+        }
+        invoiceInfo {
+          subTotal
+          date
+          number
+          __typename
+        }
         reqDate
         partApprovalImg
         counterRecieptImg
         invoiceImg
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.CreateTableMutationVariables,
   APITypes.CreateTableMutation
 >;
-
 export const updateTable = /* GraphQL */ `mutation UpdateTable(
   $input: UpdateTableInput!
   $condition: ModelTableConditionInput
@@ -522,26 +1787,99 @@ export const updateTable = /* GraphQL */ `mutation UpdateTable(
       items {
         id
         unitID
+        Unit {
+          id
+          Parts {
+            nextToken
+            __typename
+          }
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
         providerID
+        Provider {
+          id
+          emails
+          name
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         tableID
+        Table {
+          id
+          from
+          to
+          type
+          status
+          customFile
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         status
+        failureReport {
+          problemLocation
+          operator
+          description
+          __typename
+        }
+        workOrder {
+          jobToBeDone
+          personInCharge
+          sparePart
+          observation
+          __typename
+        }
+        mechanicReview {
+          mechanic
+          __typename
+        }
+        partReq {
+          partDescription
+          price
+          unitaryPrice
+          quantity
+          isCash
+          isImportant
+          __typename
+        }
+        invoiceInfo {
+          subTotal
+          date
+          number
+          __typename
+        }
         reqDate
         partApprovalImg
         counterRecieptImg
         invoiceImg
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.UpdateTableMutationVariables,
   APITypes.UpdateTableMutation
 >;
-
 export const deleteTable = /* GraphQL */ `mutation DeleteTable(
   $input: DeleteTableInput!
   $condition: ModelTableConditionInput
@@ -557,22 +1895,96 @@ export const deleteTable = /* GraphQL */ `mutation DeleteTable(
       items {
         id
         unitID
+        Unit {
+          id
+          Parts {
+            nextToken
+            __typename
+          }
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
         providerID
+        Provider {
+          id
+          emails
+          name
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         tableID
+        Table {
+          id
+          from
+          to
+          type
+          status
+          customFile
+          Parts {
+            nextToken
+            __typename
+          }
+          createdAt
+          updatedAt
+          __typename
+        }
         status
+        failureReport {
+          problemLocation
+          operator
+          description
+          __typename
+        }
+        workOrder {
+          jobToBeDone
+          personInCharge
+          sparePart
+          observation
+          __typename
+        }
+        mechanicReview {
+          mechanic
+          __typename
+        }
+        partReq {
+          partDescription
+          price
+          unitaryPrice
+          quantity
+          isCash
+          isImportant
+          __typename
+        }
+        invoiceInfo {
+          subTotal
+          date
+          number
+          __typename
+        }
         reqDate
         partApprovalImg
         counterRecieptImg
         invoiceImg
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
     createdAt
     updatedAt
+    __typename
   }
-}` as GeneratedMutation<
+}
+` as GeneratedMutation<
   APITypes.DeleteTableMutationVariables,
   APITypes.DeleteTableMutation
 >;

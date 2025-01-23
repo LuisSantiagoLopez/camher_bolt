@@ -4,6 +4,10 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
+export { default as AdministradorCreateForm } from "./AdministradorCreateForm";
+export { default as AdministradorUpdateForm } from "./AdministradorUpdateForm";
+export { default as ContadorCreateForm } from "./ContadorCreateForm";
+export { default as ContadorUpdateForm } from "./ContadorUpdateForm";
 export { default as ProviderCreateForm } from "./ProviderCreateForm";
 export { default as ProviderUpdateForm } from "./ProviderUpdateForm";
 export { default as TableCreateForm } from "./TableCreateForm";

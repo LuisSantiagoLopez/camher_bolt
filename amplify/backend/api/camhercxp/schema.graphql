@@ -30,6 +30,22 @@ type InvoiceInfo {
   number: String
 }
 
+type Administrador @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  emails: [String]
+  name: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Contador @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  emails: [String]
+  name: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
 type Provider @model @auth(rules: [{ allow: public }]) {
   id: ID!
   emails: [String]

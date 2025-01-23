@@ -21,6 +21,160 @@ console.log('APPSYNCURL:', APPSYNCURL);
 console.log('GQLAPIKEY:', GQLAPIKEY);
 console.log('REGION:', REGION);
 
+// Helper function to get all admins
+async function getAdministradores() {
+  try {
+    const adminQuery = {
+      query: `query ListAdministradors {
+        listAdministradors {
+          items {
+            emails
+          }
+        }
+      }`,
+    };
+    
+    const response = await sendAppSyncRequest(
+      APPSYNCURL,
+      REGION,
+      'POST',
+      adminQuery,
+      GQLAPIKEY,
+    );
+    
+    return response.data.listAdministradors.items
+      .flatMap(admin => admin.emails)
+      .filter(Boolean);
+  } catch (error) {
+    console.error('Error fetching administrators:', error);
+    throw error;
+  }
+}
+
+// Helper function to get all contadores
+async function getContadores() {
+  try {
+    const contadorQuery = {
+      query: `query ListContadors {
+        listContadors {
+          items {
+            emails
+          }
+        }
+      }`,
+    };
+    
+    const response = await sendAppSyncRequest(
+      APPSYNCURL,
+      REGION,
+      'POST',
+      contadorQuery,
+      GQLAPIKEY,
+    );
+    
+    return response.data.listContadors.items
+      .flatMap(contador => contador.emails)
+      .filter(Boolean);
+  } catch (error) {
+    console.error('Error fetching contadores:', error);
+    throw error;
+  }
+}
+
+// Helper function to send admin notification
+async function notifyAdministradores(partID, providerName) {
+  const adminEmails = await getAdministradores();
+  
+  const emailParams = {
+    Destination: {
+      ToAddresses: adminEmails,
+    },
+    Message: {
+      Body: {
+        Html: {
+          Charset: 'UTF-8',
+          Data: `
+            <html>
+              <body>
+                <h1>Nueva Refacción para Aprobar</h1>
+                <p>El proveedor ${providerName} ha enviado una refacción para aprobación (ID: ${partID}).</p>
+                <p>Por favor revise y apruebe la refacción en el sistema.</p>
+              </body>
+            </html>
+          `,
+        },
+      },
+      Subject: {
+        Charset: 'UTF-8',
+        Data: 'Nueva Refacción Requiere Aprobación',
+      },
+    },
+    Source: 'Camher CXP <ctasxpagar@camher.com.mx>',
+  };
+
+  await sendEmailWithRetry(emailParams);
+}
+
+async function sendEmailWithRetry(params, maxRetries = 3) {
+  const ses = new AWS.SES({ 
+    apiVersion: '2010-12-01',
+    region: REGION,
+    maxRetries: 3
+  });
+
+  let lastError;
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await ses.sendEmail(params).promise();
+      console.log('Email sent successfully:', result);
+      return result;
+    } catch (error) {
+      lastError = error;
+      console.error(`Email send attempt ${attempt} failed:`, error);
+      if (attempt < maxRetries) {
+        const delay = Math.pow(2, attempt) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+  throw new Error(`Failed to send email after ${maxRetries} attempts: ${lastError.message}`);
+}
+
+// Helper function to send contador notification
+async function notifyContadores(partID, providerName) {
+  const contadorEmails = await getContadores();
+  
+  const emailParams = {
+    Destination: {
+      ToAddresses: contadorEmails,
+    },
+    Message: {
+      Body: {
+        Html: {
+          Charset: 'UTF-8',
+          Data: `
+            <html>
+              <body>
+                <h1>Nueva Factura Requiere Contrarecibo</h1>
+                <p>El proveedor ${providerName} ha emitido una factura (ID: ${partID}).</p>
+                <p>Por favor emita el contrarecibo correspondiente en el sistema.</p>
+              </body>
+            </html>
+          `,
+        },
+      },
+      Subject: {
+        Charset: 'UTF-8',
+        Data: 'Nueva Factura Requiere Contrarecibo',
+      },
+    },
+    Source: 'Camher CXP <ctasxpagar@camher.com.mx>',
+  };
+
+  await sendEmailWithRetry(emailParams);
+}
+
+
 // Helper function to generate a signed AppSync request
 function sendAppSyncRequest(url, region, method, data, apiKey) {
   const endpoint = new URL(url).hostname;
@@ -278,18 +432,15 @@ async function sendAdminApprovalEmail(partID) {
 }
 
 exports.handler = async function (event) {
-  console.log('Event:', JSON.stringify(event, null, 2));
-  if (GQLAPIKEY.includes('fakeApi')) {
-    console.log('Running in mockApi mode');
-  } else {
-    console.log('Running in realApi mode');
-  }
+  console.log('Event received:', JSON.stringify(event, null, 2));
 
   try {
     const {
       object: { key },
       bucket: { name: bucketName },
     } = event.Records[0].s3;
+
+    console.log('Processing S3 event:', { key, bucketName });
 
     if (event.Records[0].eventName !== 'ObjectCreated:Put') {
       console.log('Event is not ObjectCreated:Put, exiting');
@@ -305,90 +456,148 @@ exports.handler = async function (event) {
     const folderPath = key.split('/').slice(0, -1).join('/');
     const fieldToUpdate = folderPath.split('/').pop();
     const partID = key.split('/').pop().split('.')[0];
+    const accessString = `${fieldToUpdate}/${fileNameWithExtension}`;
 
-    const accessString = `${fieldToUpdate}/${fileNameWithExtension}`; // Using the full filename here
+    console.log('File details:', {
+      fileNameWithExtension,
+      folderPath,
+      fieldToUpdate,
+      partID,
+      accessString
+    });
 
-    console.log('accessString:', accessString);
-
+    // Handle special cases first
     if (!VALID_FIELDS.includes(fieldToUpdate)) {
       if (fieldToUpdate === 'adminApproval') {
-        console.log(
-          'Detected adminApproval field, calling sendAdminApprovalEmail function with, partID:',
-          partID,
-        );
-        await sendAdminApprovalEmail(partID);
-
-        console.log('Deleting file from S3:', key);
-        // Delete the file from S3
-        await deleteFileFromS3(bucketName, key);
-
-        return {
-          statusCode: 200,
-          body: JSON.stringify({
-            message:
-              'Approved part email sent to provider and file deleted from S3, no further action required',
-          }),
-        };
-      } else if (fieldToUpdate === 'table') {
-        console.log(
-          'Detected table field, internally updating customFile with:',
-          accessString,
-        );
-        const updateCustomFileMutation = {
-          query: `mutation UpdateCustomFileField($id: ID!, $customFile: String!) {
-            updateTable(input: {id: $id, customFile: $customFile}) {
+        // Get part details to check status
+        const partQuery = {
+          query: `query GetPart($id: ID!) {
+            getPart(id: $id) {
               id
-              customFile
+              status
+              partReq {
+                price
+                partDescription
+              }
             }
           }`,
-          operationName: 'UpdateCustomFileField',
-          variables: {
-            id: partID,
-            customFile: accessString,
-          },
+          variables: { id: partID }
         };
 
-        console.log(
-          'UpdateTableMutation:',
-          JSON.stringify(updateCustomFileMutation, null, 2),
-        );
-
-        const response = await sendAppSyncRequest(
+        const partResponse = await sendAppSyncRequest(
           APPSYNCURL,
           REGION,
           'POST',
-          updateCustomFileMutation,
-          GQLAPIKEY,
+          partQuery,
+          GQLAPIKEY
         );
 
-        console.log('Response:', JSON.stringify(response, null, 2));
-
-        if (response.errors) {
-          return {
-            statusCode: 500,
-            body: JSON.stringify({
-              error: response.errors[0].message,
-            }),
+        const part = partResponse.data.getPart;
+        
+        // Get all administrators' emails
+        const adminEmails = await getAdministradores();
+        
+        if (adminEmails.length > 0) {
+          const emailParams = {
+            Destination: { ToAddresses: adminEmails },
+            Message: {
+              Body: {
+                Html: {
+                  Charset: 'UTF-8',
+                  Data: `
+                    <html>
+                      <head>
+                        <style>
+                          body { font-family: Arial, sans-serif; }
+                          .container { padding: 20px; }
+                          .header { color: #E06D37; }
+                          .details { background: #f5f5f5; padding: 15px; margin: 10px 0; }
+                        </style>
+                      </head>
+                      <body>
+                        <div class="container">
+                          <h1 class="header">Aprobación de Refacción Requerida</h1>
+                          <div class="details">
+                            <p><strong>ID de Parte:</strong> ${partID}</p>
+                            <p><strong>Descripción:</strong> ${part.partReq?.partDescription || 'N/A'}</p>
+                            <p><strong>Precio:</strong> $${part.partReq?.price || 0} MXN</p>
+                          </div>
+                          <p>Se requiere su aprobación para continuar con el proceso.</p>
+                        </div>
+                      </body>
+                    </html>
+                  `
+                }
+              },
+              Subject: {
+                Charset: 'UTF-8',
+                Data: 'Aprobación de Refacción Requerida'
+              }
+            },
+            Source: 'Camher CXP <ctasxpagar@camher.com.mx>'
           };
+
+          await sendEmailWithRetry(emailParams);
         }
+
+        await deleteFileFromS3(bucketName, key);
         return {
           statusCode: 200,
-          body: JSON.stringify({
-            updatePartResponse: response,
-          }),
-        };
-      } else {
-        console.error('Invalid field to update:', fieldToUpdate);
-        return {
-          statusCode: 500,
-          body: JSON.stringify({
-            error: 'Invalid field to update',
-          }),
+          body: JSON.stringify({ message: 'Admin notification sent successfully' })
         };
       }
+
+      if (fieldToUpdate === 'invoiceImg') {
+        // Get all accountants' emails
+        const accountantEmails = await getContadores();
+        
+        if (accountantEmails.length > 0) {
+          const emailParams = {
+            Destination: { ToAddresses: accountantEmails },
+            Message: {
+              Body: {
+                Html: {
+                  Charset: 'UTF-8',
+                  Data: `
+                    <html>
+                      <head>
+                        <style>
+                          body { font-family: Arial, sans-serif; }
+                          .container { padding: 20px; }
+                          .header { color: #E06D37; }
+                        </style>
+                      </head>
+                      <body>
+                        <div class="container">
+                          <h1 class="header">Nueva Factura Recibida</h1>
+                          <p>Se ha recibido una nueva factura para la parte ${partID}.</p>
+                          <p>Por favor, proceda a emitir el contrarecibo correspondiente.</p>
+                        </div>
+                      </body>
+                    </html>
+                  `
+                }
+              },
+              Subject: {
+                Charset: 'UTF-8',
+                Data: 'Nueva Factura Requiere Contrarecibo'
+              }
+            },
+            Source: 'Camher CXP <ctasxpagar@camher.com.mx>'
+          };
+
+          await sendEmailWithRetry(emailParams);
+        }
+      }
+
+      console.log('Field is not in VALID_FIELDS:', fieldToUpdate);
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: `Invalid field: ${fieldToUpdate}` })
+      };
     }
 
-    // mutation to update the part since a new file has been uploaded
+    // Handle regular file updates
     const updatePartMutation = {
       query: `mutation UpdatePartField($id: ID!, $${fieldToUpdate}: String!) {
         updatePart(input: {id: $id, ${fieldToUpdate}: $${fieldToUpdate}}) {
@@ -396,61 +605,38 @@ exports.handler = async function (event) {
           ${fieldToUpdate}
           Provider {
             emails
+            name
           }
         }
       }`,
-      operationName: 'UpdatePartField',
       variables: {
         id: partID,
         [fieldToUpdate]: accessString,
       },
     };
 
-    console.log(
-      'UpdatePartMutation:',
-      JSON.stringify(updatePartMutation, null, 2),
-    );
-
     const response = await sendAppSyncRequest(
       APPSYNCURL,
       REGION,
       'POST',
       updatePartMutation,
-      GQLAPIKEY,
+      GQLAPIKEY
     );
 
-    console.log('Response:', JSON.stringify(response, null, 2));
-
     if (response.errors) {
-      throw new Error(response.errors[0]);
+      throw new Error(response.errors[0].message);
     }
 
-    let emailResponse;
+    // Handle counter receipt notification
     if (
-      response.data.updatePart.Provider &&
-      response.data.updatePart.Provider.emails.length > 0 &&
-      fieldToUpdate === 'counterRecieptImg'
+      response.data.updatePart.Provider?.emails?.length > 0 &&
+      fieldToUpdate === 'counterReceiptImg'
     ) {
-      let signedUrl;
-      try {
-        signedUrl = await new AWS.S3().getSignedUrlPromise('getObject', {
-          Bucket: bucketName,
-          Key: `public/${accessString}`,
-          Expires: 60 * 60 * 24 * 7, // 7 days
-        });
-        if (!signedUrl) {
-          throw new Error('No signed URL');
-        }
-        console.log('Signed URL:', signedUrl);
-      } catch (error) {
-        console.error('Error getting signed URL:', error);
-        return {
-          statusCode: 500,
-          body: JSON.stringify({
-            error: error.message,
-          }),
-        };
-      }
+      const signedUrl = await new AWS.S3().getSignedUrlPromise('getObject', {
+        Bucket: bucketName,
+        Key: `public/${accessString}`,
+        Expires: 60 * 60 * 24 * 7 // 7 days
+      });
 
       const emailParams = {
         Destination: {
@@ -463,107 +649,59 @@ exports.handler = async function (event) {
               Data: `
                 <html>
                   <head>
-                    <meta charset="UTF-8">
-                    <title>Contra recibo ingresado</title>
                     <style>
-                      body {
-                          color: black;
-                          font-family: Arial, sans-serif;
-                          font-size: 16px;
-                          line-height: 1.4;
-                          margin: 0;
-                          padding: 0;
-                          display: flex;
-                          justify-content: center;
-                          align-items: center;
-                          height: 100vh;
-                        }
-                        
-                        .container {
-                          background-color: #f1f1f1;
-                          color: #2d2d2d;
-                          border-radius: 8px;
-                          box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-                          max-width: 80%;
-                          padding: 40px;
-                        }
-                        
-                        h1 {
-                          color: #E06D37;
-                          font-size: 24px;
-                          font-weight: bold;
-                          margin: 0 0 20px;
-                          text-align: center;
-                        }
-                        
-                        p {
-                          margin: 0 0 20px;
-                        }
-                        
-                        .code {
-                          background-color: #E06D37;
-                          border-radius: 8px;
-                          font-size: 24px;
-                          font-weight: bold;
-                          padding: 10px;
-                          text-align: center;
-                          color: white;
-                        }
-                        
-                        .logo {
-                          display: block;
-                          margin: 0 auto;
-                          max-width: 200px;
-                }
+                      body { font-family: Arial, sans-serif; }
+                      .container { padding: 20px; }
+                      .header { color: #E06D37; }
+                      .button { 
+                        background: #E06D37;
+                        color: white;
+                        padding: 10px 20px;
+                        text-decoration: none;
+                        border-radius: 5px;
+                        display: inline-block;
+                      }
                     </style>
                   </head>
                   <body>
                     <div class="container">
-                      <img class="logo" src="https://i.imgur.com/n7ZMPf3.png" alt="Logo">
-                      <h1>Contra recibo ingresado</h1>
-                      <p>Se ha ingresado un contra recibo en el sistema CXP Camher para una parte en la que está registrado como proveedor.</p>
-                      <p>ID de la parte: ${partID}</p>
-                      <a href="${signedUrl}">
-                      <p class="code">Ver el archivo</p> 
-                      </a>
-                      <p>Nota: este enlace expirará en 7 días.</p>
-                      <p>Si no has solicitado este correo, por favor ignora este mensaje.</p>
+                      <h1 class="header">Contrarecibo Disponible</h1>
+                      <p>Se ha generado un contrarecibo para la parte ${partID}.</p>
+                      <p><a href="${signedUrl}" class="button">Ver Contrarecibo</a></p>
+                      <p>Este enlace expirará en 7 días.</p>
                     </div>
                   </body>
                 </html>
-              `,
-            },
+              `
+            }
           },
           Subject: {
             Charset: 'UTF-8',
-            Data: 'Contra recibo ingresado',
-          },
+            Data: 'Nuevo Contrarecibo Disponible'
+          }
         },
-        Source: 'Camher CXP <ctasxpagar@camher.com.mx>',
+        Source: 'Camher CXP <ctasxpagar@camher.com.mx>'
       };
 
-      emailResponse = await new AWS.SES().sendEmail(emailParams).promise();
-
-      console.log('Email Response:', JSON.stringify(emailResponse, null, 2));
-    } else {
-      console.log('No emails to notify');
-      emailResponse = 'No emails to notify';
+      await sendEmailWithRetry(emailParams);
     }
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        updatePartResponse: response,
-        emailResponse: emailResponse,
-      }),
+        message: 'Operation completed successfully',
+        updatePartResponse: response
+      })
     };
+
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error in handler:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({
         error: error.message,
-      }),
+        stack: error.stack
+      })
     };
   }
 };
