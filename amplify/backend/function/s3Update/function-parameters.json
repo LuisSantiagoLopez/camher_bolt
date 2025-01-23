@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "api": {
+      "camhercxp": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

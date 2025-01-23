@@ -1,0 +1,38 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "us-west-1",
+            "eventTime": "2023-10-11T20:58:47.673Z",
+            "eventName": "ObjectCreated:Put",
+            "userIdentity": {
+                "principalId": "AWS:AROAUJOOLRQWBMMR2S76Y:CognitoIdentityCredentials"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "189.217.194.58"
+            },
+            "responseElements": {
+                "x-amz-request-id": "BVY2YQYZFPFCGD0D",
+                "x-amz-id-2": "BLIN+8KamAa1Tg2zXmySdd5/nueDhIzfk0k5DzRLKj3PSV+bXTSErFR1jwX/t8hw7n1ouepSETZOPrdjsxKYlFn4ipPJax7B"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "24dfca7c-fb5a-49d0-9cba-82fbb5a075bb",
+                "bucket": {
+                    "name": "cxp-camher-dash44052-prod",
+                    "ownerIdentity": {
+                        "principalId": "A1TTIAIFNUYC2K"
+                    },
+                    "arn": "arn:aws:s3:::cxp-camher-dash44052-prod"
+                },
+                "object": {
+                    "key": "public/adminApproval/636b54cd-b81f-407c-859a-cae0f4a11ae7",
+                    "size": 17,
+                    "eTag": "aac726de092e880c2c90b948c4a3f300",
+                    "sequencer": "0065270C87A202863F"
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "version": "1",
+    "region": "us-west-1",
+    "userPoolId": "us-west-1_9ezRHx0uK",
+    "userName": "b979e9be-c001-7070-076f-f33c700da706",
+    "callerContext": {
+        "awsSdkVersion": "aws-sdk-unknown-unknown",
+        "clientId": "3g3g53kpobe3i2pmkttn5393ks"
+    },
+    "triggerSource": "PostConfirmation_ConfirmSignUp",
+    "request": {
+        "userAttributes": {
+            "sub": "b979e9be-c001-7070-076f-f33c700da706",
+            "email_verified": "true",
+            "cognito:user_status": "CONFIRMED",
+            "cognito:email_alias": "andres.tara.so@gmail.com",
+            "name": "Andrés Tarazona Solloa",
+            "email": "andres.tara.so@gmail.com"
+        }
+    },
+    "response": {}
+}

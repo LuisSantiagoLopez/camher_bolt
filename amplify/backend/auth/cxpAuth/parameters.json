@@ -1,0 +1,67 @@
+{
+  "authSelections": "identityPoolAndUserPool",
+  "resourceName": "cxpAuth",
+  "serviceType": "imported",
+  "region": "us-west-1",
+  "requiredAttributes": [
+    "email",
+    "name"
+  ],
+  "passwordPolicyMinLength": 8,
+  "passwordPolicyCharacters": [],
+  "mfaConfiguration": "OFF",
+  "autoVerifiedAttributes": [
+    "email"
+  ],
+  "mfaTypes": [
+    "SMS"
+  ],
+  "smsAuthenticationMessage": "Tu código de autenticación de Camher CXP es {####}",
+  "smsVerificationMessage": "Tu código de verificación de Camher CXP es {####}",
+  "emailVerificationSubject": "Código de verificación de Camher CXP",
+  "emailVerificationMessage": "Tu código de verificación de Camher CXP es {####}",
+  "defaultPasswordPolicy": false,
+  "aliasAttributes": [],
+  "userpoolClientGenerateSecret": false,
+  "userpoolClientRefreshTokenValidity": 30,
+  "userpoolClientWriteAttributes": [
+    "email"
+  ],
+  "userpoolClientReadAttributes": [
+    "email"
+  ],
+  "userpoolClientLambdaRole": "cxpAuth_userpoolclient_lambda_role",
+  "userpoolClientSetAttributes": false,
+  "useDefault": "manual",
+  "authRoleArn": {
+    "Fn::GetAtt": [
+      "AuthRole",
+      "Arn"
+    ]
+  },
+  "unauthRoleArn": {
+    "Fn::GetAtt": [
+      "UnauthRole",
+      "Arn"
+    ]
+  },
+  "breakCircularDependency": true,
+  "dependsOn": [],
+  "hostedUI": false,
+  "userPoolGroupList": [
+    "admin",
+    "contador",
+    "contaduria", 
+    "operador",
+    "proveedor",
+    "taller"
+  ],
+  "serviceName": "Cognito",
+  "usernameCaseSensitive": false,
+  "useEnabledMfas": true,
+  "userPoolId": "us-west-1_dd7TKiATK",
+  "webClientId": "4euc8am2nrlg01uk29ivial7bo",
+  "identityPoolId": "us-west-1:69c81a08-1e40-4592-8b56-63805859d82f",
+  "userPoolName": "cxpUserPool",
+  "identityPoolName": "cxpIdPool"
+}

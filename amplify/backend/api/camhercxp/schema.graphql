@@ -1,0 +1,103 @@
+type PartReq {
+  partDescription: [String]
+  price: Float
+  unitaryPrice: [Float]
+  quantity: [Int]
+  isCash: Boolean
+  isImportant: Boolean
+}
+
+type MechanicReview {
+  mechanic: String
+}
+
+type WorkOrder {
+  jobToBeDone: String
+  personInCharge: String
+  sparePart: String
+  observation: String
+}
+
+type FailureReport {
+  problemLocation: String
+  operator: String
+  description: String
+}
+
+type InvoiceInfo {
+  subTotal: Float
+  date: AWSDateTime
+  number: String
+}
+
+type ValidationChecks {
+  contactProvider: Boolean
+  correctPart: Boolean
+  partDelivered: Boolean
+  partInstalled: Boolean
+  partStatus: String
+  validatedAt: AWSDateTime
+  validatedBy: String
+}
+
+type Administrador @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  emails: [String]
+  name: String
+}
+
+type Contador @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  emails: [String]
+  name: String
+}
+
+type Provider @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  emails: [String]
+  name: String
+  Parts: [Part] @hasMany(indexName: "byProvider", fields: ["id"])
+}
+
+type Unit @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  Parts: [Part] @hasMany(indexName: "byUnit", fields: ["id"])
+  name: String
+}
+
+type Part @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  unitID: ID! @index(name: "byUnit")
+  Unit: Unit! @belongsTo(fields: ["unitID"])
+  providerID: ID @index(name: "byProvider")
+  Provider: Provider @belongsTo(fields: ["providerID"])
+  tableID: ID! @index(name: "byTable")
+  Table: Table! @belongsTo(fields: ["tableID"])
+  status: Int
+  failureReport: FailureReport
+  workOrder: WorkOrder
+  mechanicReview: MechanicReview
+  partReq: PartReq
+  invoiceInfo: InvoiceInfo
+  validationChecks: ValidationChecks
+  reqDate: AWSDateTime
+  partApprovalImg: String
+  counterRecieptImg: String
+  invoiceImg: String
+}
+
+type Table @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  from: AWSDateTime!
+  to: AWSDateTime!
+  type: TableType! @index(name: "byType")
+  status: Int! @index(name: "byStatus")
+  customFile: String
+  Parts: [Part] @hasMany(indexName: "byTable", fields: ["id"])
+  createdAt: AWSDateTime!
+}
+
+enum TableType {
+  CURRENT
+  HISTORY
+}

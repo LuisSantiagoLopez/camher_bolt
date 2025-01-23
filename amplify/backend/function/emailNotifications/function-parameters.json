@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "auth": {
+      "cxpAuth": [
+        "read"
+      ]
+    },
+    "api": {
+      "camhercxp": [
+        "Query"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

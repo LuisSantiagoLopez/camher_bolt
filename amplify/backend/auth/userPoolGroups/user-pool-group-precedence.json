@@ -1,0 +1,26 @@
+[
+  {
+    "groupName": "admin",
+    "precedence": 1
+  },
+  {
+    "groupName": "contador",
+    "precedence": 2
+  },
+  {
+    "groupName": "contaduria",
+    "precedence": 3
+  },
+  {
+    "groupName": "operador",
+    "precedence": 4
+  },
+  {
+    "groupName": "proveedor",
+    "precedence": 5
+  },
+  {
+    "groupName": "taller",
+    "precedence": 6
+  }
+]

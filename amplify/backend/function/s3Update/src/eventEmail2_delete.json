@@ -1,0 +1,38 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "us-west-1",
+            "eventTime": "2023-09-13T01:48:55.782Z",
+            "eventName": "ObjectRemoved:Delete",
+            "userIdentity": {
+                "principalId": "AWS:AROAUJOOLRQWIIGPIALCJ:CognitoIdentityCredentials"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "187.168.215.226"
+            },
+            "responseElements": {
+                "x-amz-request-id": "4FR1CAZR89HAAN96",
+                "x-amz-id-2": "2QC+jsN7gwam9zZYEhBFkGddIBkyiA+SwS1wplgCM49S5kO1biT3snWTaswIm7VQqiZRwOpd2AQsUWA+ff96z7+MNzQzYEcD"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "e8b2d590-1da3-4733-89db-2f9e51085ef7",
+                "bucket": {
+                    "name": "cxp-camher-dash231446-dev",
+                    "ownerIdentity": {
+                        "principalId": "A1TTIAIFNUYC2K"
+                    },
+                    "arn": "arn:aws:s3:::cxp-camher-dash231446-dev"
+                },
+                "object": {
+                    "key": "public/counterRecieptImg/636b54cd-b81f-407c-859a-cae0f4a11ae7.jpg",
+                    "size": 16395,
+                    "eTag": "318becce74f05864ff59ad6ab6cf17fc",
+                    "sequencer": "0065011507BF51C2BE"
+                }
+            }
+        }
+    ]
+}

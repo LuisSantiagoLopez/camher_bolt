@@ -1,0 +1,23 @@
+{
+  "trigger": true,
+  "modules": [
+    "custom"
+  ],
+  "parentResource": "cxpAuth",
+  "functionName": "cxpAuthPreSignup",
+  "resourceName": "cxpAuthPreSignup",
+  "parentStack": "auth",
+  "triggerEnvs": "[]",
+  "triggerDir": "/snapshot/repo/build/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/PreSignup",
+  "triggerTemplate": "PreSignup.json.ejs",
+  "triggerEventPath": "PreSignup.event.json",
+  "roleName": "cxpAuthPreSignup",
+  "skipEdit": true,
+  "permissions": {
+    "api": {
+      "camhercxp": [
+        "Query"
+      ]
+    }
+  }
+}
