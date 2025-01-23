@@ -13,6 +13,5 @@
       "BuildCommand": "npm run-script build",
       "StartCommand": "npm run-script start"
     }
-  },
-  "appId": "d26c5e9sa2m641"
+  }
 }

@@ -30,28 +30,6 @@ type InvoiceInfo {
   number: String
 }
 
-type ValidationChecks {
-  contactProvider: Boolean
-  correctPart: Boolean
-  partDelivered: Boolean
-  partInstalled: Boolean
-  partStatus: String
-  validatedAt: AWSDateTime
-  validatedBy: String
-}
-
-type Administrador @model @auth(rules: [{ allow: public }]) {
-  id: ID!
-  emails: [String]
-  name: String
-}
-
-type Contador @model @auth(rules: [{ allow: public }]) {
-  id: ID!
-  emails: [String]
-  name: String
-}
-
 type Provider @model @auth(rules: [{ allow: public }]) {
   id: ID!
   emails: [String]
@@ -79,7 +57,6 @@ type Part @model @auth(rules: [{ allow: public }]) {
   mechanicReview: MechanicReview
   partReq: PartReq
   invoiceInfo: InvoiceInfo
-  validationChecks: ValidationChecks
   reqDate: AWSDateTime
   partApprovalImg: String
   counterRecieptImg: String
