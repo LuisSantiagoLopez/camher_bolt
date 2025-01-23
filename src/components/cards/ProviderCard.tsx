@@ -91,7 +91,7 @@ export default function ProviderCard({ unit, name, isInvoice }: ProviderCardProp
 
         // Try to fetch the image
         if (unit.id) {
-          const { blob } = await fetchFileFromS3(unit.id, isInvoice ? Field.invoice : Field.counterReceiptImg);
+          const { blob } = await fetchFileFromS3(unit.id, isInvoice ? Field.invoiceImg : Field.counterReceiptImg);
           if (blob) {
             const url = URL.createObjectURL(blob);
             setUrl(url);
