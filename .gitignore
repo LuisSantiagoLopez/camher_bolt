@@ -85,10 +85,6 @@ amplify/backend/storage/*/build
 ehthumbs.db
 Thumbs.db
 
-# Package files
-package-lock.json
-yarn.lock
-
 # Optional npm cache directory
 .npm
 
