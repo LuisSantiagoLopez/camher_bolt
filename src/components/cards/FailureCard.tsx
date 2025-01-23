@@ -16,6 +16,7 @@ interface FailureCardProps {
   isAction?: boolean;
   name?: string;
   handleClick: (unit: Part, status: number) => void;
+  onEdit?: () => void;
 }
 
 export interface Provider {
@@ -33,6 +34,7 @@ export function FailureCard({
   isAction = false,
   name,
   handleClick,
+  onEdit,
 }: FailureCardProps) {
   const [url, setUrl] = useState<string>('');
   const [shortId, setShortId] = useState<string>('');
@@ -118,6 +120,8 @@ export function FailureCard({
       console.error('Error fetching image', error);
     }
   }
+
+  onEdit?.();
 
   return (
     <>

@@ -1,9 +1,9 @@
 import React from 'react';
-import { CardProps } from '../../types/cardTypes.d.ts';
+import type { CardProps } from '../../types/cardTypes';
 import UnitCard from '../cards/UnitCard';
 import AdminCard from '../cards/AdminCard';
 import ProviderCard from '../cards/ProviderCard';
-import FailureCard from '../cards/FailureCard';
+import { FailureCard } from '../cards/FailureCard';
 import CounterCard from '../cards/CounterCard';
 import CardBackground from './CardBackground';
 import { motion } from 'framer-motion';
@@ -19,7 +19,7 @@ export default function Card(cardP: CardProps): JSX.Element {
 
   React.useEffect(() => {
     getUnitName(cardP.data, setUnitName);
-  }, []);
+  }, [cardP.data]);
 
   const handleEdit = () => {
     // Store current part data in session storage
