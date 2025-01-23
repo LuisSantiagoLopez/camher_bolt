@@ -18,54 +18,79 @@ interface FailureCardProps {
   handleClick: (unit: Part, status: number) => void;
 }
 
-export default function FailureCard({
+export interface Provider {
+  id: string;
+  emails?: string[];
+  name?: string;
+  Parts?: {
+    items: Part[];
+    nextToken?: string;
+  };
+}
+
+export function FailureCard({ 
   failure,
-  isAction,
+  isAction = false,
   name,
   handleClick,
 }: FailureCardProps) {
-  const [url, setUrl] = useState('');
-  const [shortId, setShortId] = useState('');
-  const [allProvider, setAllProvider] = useState<Provider[]>([]);
-  const [provider, setProvider] = useState<Provider>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [url, setUrl] = useState<string>('');
+  const [shortId, setShortId] = useState<string>('');
+  const [providers, setProviders] = useState<Provider[]>([]); // instead of allProvider
+  const [selectedProvider, setSelectedProvider] = useState<Provider | undefined>(); // instead of provider
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
   const { setPastTools, setSelectedTool } = useSelectedToolContext();
 
   useEffect(() => {
     const fetchProviders = async () => {
-      const providerList = await queryAllProvider();
-      if (!providerList) return;
-      setAllProvider(providerList as Provider[]);
+      try {
+        setIsLoading(true);
+        const providerList = await queryAllProvider();
+        if (!providerList) {
+          throw new Error('No providers found');
+        }
+        setProviders(providerList as Provider[]);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Failed to fetch providers'));
+      } finally {
+        setIsLoading(false);
+      }
     };
+
     fetchProviders();
   }, []);
 
   const handleDownloadTable = async () => {
-    if (!failure) return;
-    setIsLoading(true);
-    await getPartTableBlob([failure.id]);
-    setIsLoading(false);
+    if (!failure?.id) return;
+    try {
+      setIsLoading(true);
+      await getPartTableBlob([failure.id]);
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to download table'));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleEdit = () => {
-    // Store current part data in session storage
+    if (!failure) return;
     sessionStorage.setItem('editingPart', JSON.stringify(failure));
-    // Navigate to edit flow
     setPastTools(['status', 'action']);
     setSelectedTool('newrefaction');
   };
 
   const handleYes = async () => {
-    if (!failure || !provider) {
-      alert('Por favor selecciona un proveedor');
+    if (!failure || !selectedProvider) {
+      setError(new Error('Please select a provider first'));
       return;
     }
+
     try {
-      await setPartProvider(failure.id, provider.id);
-      handleClick(failure, failure.status ? failure.status + 1 : 1);
-    } catch (error) {
-      console.error('Error updating:', error);
-      alert('Error al actualizar');
+      await setPartProvider(failure.id, selectedProvider.id);
+      handleClick(failure, 1);
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to set provider'));
     }
   };
 
@@ -84,7 +109,7 @@ export default function FailureCard({
   async function getImg() {
     try {
       if (!failure?.id) return;
-      const { blob } = await fetchFileFromS3(failure?.id, 'partApproval');
+      const { blob } = await fetchFileFromS3(failure?.id, 'partApprovalImg');
       if (!blob) return;
       const url = window.URL.createObjectURL(blob);
       if (!url) return;
@@ -156,12 +181,7 @@ export default function FailureCard({
       {isAction && (
         <>
           <div className="flex w-full flex-col items-center justify-center space-y-6 p-4">
-            <ProviderQueryDropdown
-              options={allProvider}
-              setOption={setProvider}
-              className="w-1/2 border border-black"
-              placeholder="Seleccionar proveedor..."
-            />
+
             <div className="flex w-full justify-center space-x-4">
               <button
                 onClick={handleYes}
