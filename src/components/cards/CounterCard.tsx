@@ -1,6 +1,7 @@
 import React from 'react';
 import { IconContext } from 'react-icons';
-import { AiFillExclamationCircle, AiOutlineUnorderedList, AiFillQuestionCircle, IoPricetag } from 'react-icons/ai';
+import { AiFillExclamationCircle, AiOutlineUnorderedList, AiFillQuestionCircle } from 'react-icons/ai';
+import { IoMdPricetag } from 'react-icons/io';
 import { UnitT as Unit } from '@/graphql';
 
 interface CounterCardProps {
@@ -32,7 +33,7 @@ export default function CounterCard({ counter }: CounterCardProps) {
           </div>
           <div className="flex w-full flex-row items-center space-x-5 rounded-md bg-neutral-600 px-10 py-5">
             <IconContext.Provider value={{ size: '1.5em' }}>
-              <IoPricetag />
+              <IoMdPricetag />
             </IconContext.Provider>
           </div>
         </div>

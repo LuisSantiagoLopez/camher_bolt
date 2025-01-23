@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { IconContext } from 'react-icons';
 import { AiOutlineDownload } from 'react-icons/ai';
@@ -12,24 +12,22 @@ interface UnitCardProps {
 }
 
 export default function UnitCard({ unit, name }: UnitCardProps) {
-  const [url, setUrl] = React.useState('');
-  const [shortId, setShortId] = React.useState('');
+  const [url, setUrl] = useState<string>('');
+  const [shortId, setShortId] = useState<string>('');
 
   useEffect(() => {
     if (!unit) return;
-    const shortid1 = unit.id.split('-')[0];
-    const shortid2 = unit.id.split('-')[4];
-    setShortId(shortid1 + '-' + shortid2);
+    const [shortid1, , , , shortid2] = unit.id.split('-');
+    setShortId(`${shortid1}-${shortid2}`);
     getImg();
-  }, []);
+  }, [unit]);
 
   async function getImg() {
     try {
       if (!unit?.id) return;
-      const { blob } = await fetchFileFromS3(unit?.id, 'partApproval');
+      const { blob } = await fetchFileFromS3(unit.id, 'partApprovalImg');
       if (!blob) return;
       const url = window.URL.createObjectURL(blob);
-      if (!url) return;
       setUrl(url);
     } catch (error) {
       console.error('Error fetching image', error);
@@ -47,7 +45,7 @@ export default function UnitCard({ unit, name }: UnitCardProps) {
         {url && (
           <Image
             src={url}
-            alt={'unit' + shortId + 'evidence'}
+            alt={`unit${shortId}evidence`}
             width={400}
             height={400}
             className="m-2 h-96 rounded-md"
@@ -64,25 +62,25 @@ export default function UnitCard({ unit, name }: UnitCardProps) {
           </div>
           <div className="flex w-full flex-row items-center space-x-5 rounded-md bg-neutral-600 px-10 py-5">
             <p className="text-xl font-light">
-              {unit && unit.failureReport?.description}
+              {unit?.failureReport?.description}
             </p>
           </div>
           <div className="flex w-full flex-row items-center space-x-5 rounded-md bg-neutral-600 px-10 py-5">
             <p className="text-xl font-light">
-              {unit && unit.partReq?.partDescription}
+              {unit?.partReq?.partDescription}
             </p>
           </div>
           <div className="flex w-full flex-row items-center space-x-5 rounded-md bg-neutral-600 px-10 py-5">
             <p className="text-xl font-light">
-              {unit && unit.partReq?.price} MXN
+              {unit?.partReq?.price} MXN
             </p>
           </div>
         </div>
       </div>
       <div id="cardFooter" className="mt-3 flex flex-row items-center justify-between text-sm">
-        <p className="text-sm text-white">{unit && unit.reqDate}</p>
+        <p className="text-sm text-white">{unit?.reqDate}</p>
         <div id="cardID" className="flex flex-col justify-center self-end rounded-md bg-camhergreen px-2 text-black">
-          <p className="mx-auto">{unit && unit.id}</p>
+          <p className="mx-auto">{unit?.id}</p>
         </div>
       </div>
     </>
