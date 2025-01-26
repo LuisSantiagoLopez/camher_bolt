@@ -5,7 +5,8 @@ import { queryPart } from './helperFunPart';
 export const enum Field {
   invoiceImg = 'invoiceImg',
   partApprovalImg = 'partApprovalImg',
-  counterReceiptImg = 'counterReceiptImg'
+  counterReceiptImg = 'counterReceiptImg',
+  invoice = "invoice"
 }
 
 export const uploadFileToS3 = async (
@@ -88,7 +89,7 @@ export async function fetchFileFromS3(
         key = part.partApprovalImg;
         break;
       case Field.counterReceiptImg:
-        key = part.counterReceiptImg;
+        key = part.counterRecieptImg;
         break;
       default:
         throw new Error('Invalid field type');

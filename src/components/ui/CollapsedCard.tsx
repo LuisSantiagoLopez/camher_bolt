@@ -40,7 +40,7 @@ export default function ({ handleClick, part, isActive }: Props) {
   async function getImg() {
     try {
       if (!part?.id) return;
-      const { blob } = await fetchFileFromS3(part?.id, 'partApproval');
+      const { blob } = await fetchFileFromS3(part?.id, 'partApprovalImg');
       if (!blob) return;
       const url = window.URL.createObjectURL(blob);
       if (!url) return;

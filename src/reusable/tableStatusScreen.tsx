@@ -1,7 +1,7 @@
 import Navigation from '#/InnerNavBar';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import { TableT } from '@/graphql';
+import { Table } from '@/types/models';
 import LoadingAnim from '@/components/ui/animations/loadingAnim';
 
 // Import types
@@ -81,7 +81,7 @@ function TableStatusScreen({ type }: Props): JSX.Element {
     sessionStorage.setItem('currentTab', tabName);
   };
 
-  const handleClick = (t: TableT) => {
+  const handleClick = (t: Table) => {
     setIsExpanded(!isExpanded);
     setChosenTable(t);
   };

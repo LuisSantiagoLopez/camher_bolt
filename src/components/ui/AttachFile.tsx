@@ -21,21 +21,22 @@ const UploadImage: React.FC<UploadImageProps> = ({
   isUploadComplete,
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Add isLoading state
 
   useEffect(() => {
     const uploadFile = async () => {
-      setIsLoading(true);
+      setIsLoading(true); // Set isLoading to true when upload starts
       try {
         if (!selectedFile) {
-          setIsLoading(false);
+          setIsLoading(false); // Set isLoading to false if there's no file
           return;
         }
         const key = `${name}/${part}`;
-        await uploadFileToS3(selectedFile, key, imagesOnly, isTable);
+        await uploadFileToS3(selectedFile, key, imagesOnly, isTable); // Pass imagesOnly prop in case we want to only allow images
         if (setStatus) setStatus(1, part);
-        setIsUploadComplete(true);
+        setIsUploadComplete(true); // Set to true when upload is complete
       } catch (error: any) {
+        // Check the message property of the error
         if (error.message === 'FileTypeNotAllowedException') {
           isTable
             ? alert('El tipo de archivo no está permitido. Cargue un excel.')
@@ -48,7 +49,7 @@ const UploadImage: React.FC<UploadImageProps> = ({
           alert('Error al subir el archivo, intente de nuevo.');
         }
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); // Set isLoading to false when upload is complete or an error occurs
       }
     };
 
@@ -68,9 +69,11 @@ const UploadImage: React.FC<UploadImageProps> = ({
         htmlFor="upload"
         className="flex cursor-pointer flex-col items-center gap-2"
       >
+        {/* Render a loading spinner while isLoading is true */}
         {isLoading ? (
           <div className="h-10 w-10 animate-spin rounded-full border-b-4 border-t-4 border-green-500"></div>
-        ) : isUploadComplete ? (
+        ) : // Render a checkmark when isUploadComplete is true
+        isUploadComplete ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-10 w-10 text-green-500"

@@ -3,11 +3,9 @@ import { ProviderT as Provider } from '@/graphql';
 
 interface ProviderQueryDropdownProps {
   options: Provider[];
-  setOption: (provider: Provider | undefined) => void;
+  setOption: React.Dispatch<React.SetStateAction<Provider | undefined>>;
   className?: string;
   placeholder?: string;
-  isLoading?: boolean;
-  error?: Error | null;
 }
 
 const ProviderQueryDropdown: React.FC<ProviderQueryDropdownProps> = ({
@@ -15,30 +13,20 @@ const ProviderQueryDropdown: React.FC<ProviderQueryDropdownProps> = ({
   setOption,
   className,
   placeholder,
-  isLoading,
-  error
 }) => {
-  if (error) {
-    return <div className="text-red-500">{error.message}</div>;
-  }
-
-  if (isLoading) {
-    return <div className="loading-spinner">Loading providers...</div>;
-  }
-
   return (
     <select
-      className={`h-12 w-44 rounded-xl pl-4 ${className}`}
-      onChange={(e) => {
-        const selected = options.find(p => p?.id === e.target.value);
-        setOption(selected);
-      }}
-      disabled={isLoading || !!error}
+      className={`h-12 w-44 rounded-xl pl-4 text-neutral-400 ${className}`}
+      onChange={(e) =>
+        setOption(
+          options.find((provider: Provider) => provider?.id === e.target.value),
+        )
+      }
     >
-      <option value="">{placeholder}</option>
-      {options.map((provider) => (
+      <option>{placeholder}</option>
+      {options.map((provider: Provider) => (
         <option key={provider?.id} value={provider?.id}>
-          {provider?.name || 'Unnamed Provider'}
+          {provider?.name}
         </option>
       ))}
     </select>

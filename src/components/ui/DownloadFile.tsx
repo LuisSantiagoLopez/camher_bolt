@@ -24,8 +24,9 @@ export const DownloadFile: React.FC<DownloadFileProps> = ({
 
   const handleDownload = async () => {
     setIsLoading(true);
-    if (!partID) return;
+    if (!partID) return; // If there's no partID, there's no file to download
     if (url) {
+      // If URL is already set, trigger download
       const link = document.createElement('a');
       link.href = url;
       link.download = field;
@@ -38,6 +39,7 @@ export const DownloadFile: React.FC<DownloadFileProps> = ({
       if (!blob) return;
       const generatedUrl = window.URL.createObjectURL(blob);
       setUrl(generatedUrl);
+      // Trigger download after URL is set
       const link = document.createElement('a');
       link.href = generatedUrl;
       link.download = filename;
@@ -51,11 +53,11 @@ export const DownloadFile: React.FC<DownloadFileProps> = ({
 
   const getButtonName = (field: keyof typeof Field): string => {
     switch (field) {
-      case Field.invoiceImg:
+      case Field.invoice:
         return 'Descargar Factura';
-      case Field.counterReceiptImg:
+      case Field.counterReciept:
         return 'Descargar Contrarrecibo';
-      case Field.partApprovalImg:
+      case Field.partApproval:
         return 'Descargar Evidencia';
       default:
         return '';
@@ -64,9 +66,9 @@ export const DownloadFile: React.FC<DownloadFileProps> = ({
 
   const getIcon = (field: keyof typeof Field): JSX.Element => {
     switch (field) {
-      case Field.invoiceImg:
+      case Field.invoice:
         return <AiFillFileText />;
-      case Field.counterReceiptImg:
+      case Field.counterReciept:
         return <AiOutlinePaperClip />;
       default:
         return <AiOutlineDownload />;
