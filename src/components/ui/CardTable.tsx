@@ -152,7 +152,7 @@ function TableCard({
                         {p?.id && p.counterRecieptImg && (
                           <DownloadFile
                             partID={p?.id}
-                            field={Field.counterReciept}
+                            field={Field.counterReceiptImg}
                             small
                           />
                         )}
