@@ -28,7 +28,7 @@ import { PartT as Part, UnitT as Unit } from '@/graphql';
 import UploadImage from './AttachFile';
 import TextInput from './TextInput';
 import { DatePicker } from './DatePicker';
-import { DateRangeType } from '@/types/datepickerTypes';
+import { DateRangeType, DateValueType } from '@/types/datepickerTypes';
 import CardBackground from './CardBackground';
 import { DownloadFile } from './DownloadFile';
 import { TallerContext } from '@/flows/taller';
@@ -552,6 +552,16 @@ function ProviderCard({
     setInvoiceInfo({ ...invoiceInfo, subTotal: Number(e.target.value) });
   }
 
+  // In ProviderCard component:
+  const handleDateChange = (newValue: DateValueType) => {
+    if (newValue) {
+      setInvoiceDate({
+        startDate: newValue.startDate ? new Date(newValue.startDate) : null,
+        endDate: newValue.endDate ? new Date(newValue.endDate) : null,
+      });
+    }
+  };
+
   useEffect(() => {
     // Check if manual upload is complete, alert and after ok reload page
     if (isManualUploadComplete) {
@@ -579,8 +589,8 @@ function ProviderCard({
       subTotal: unit.invoiceInfo?.subTotal ? unit.invoiceInfo.subTotal : 0,
     });
     setInvoiceDate({
-      startDate: unit.invoiceInfo?.date ? unit.invoiceInfo.date : '',
-      endDate: unit.invoiceInfo?.date ? unit.invoiceInfo.date : '',
+      startDate: unit.invoiceInfo?.date ? new Date(unit.invoiceInfo.date) : null,
+      endDate: unit.invoiceInfo?.date ? new Date(unit.invoiceInfo.date) : null
     });
   }, []);
 
@@ -789,10 +799,10 @@ function ProviderCard({
                       {isInvoice ? (
                         <DatePicker
                           value={invoiceDate}
-                          setValue={setInvoiceDate}
+                          setValue={handleDateChange}
                           placeholder="Hello"
                           asSingle
-                        />
+                      />
                       ) : (
                         <TextInput
                           intent="disabled"

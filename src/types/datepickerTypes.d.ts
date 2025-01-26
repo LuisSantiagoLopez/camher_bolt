@@ -1,8 +1,10 @@
-export type DateType = Date | string | null;
+import { DateValueType as LibraryDateValueType } from "react-tailwindcss-datepicker/dist/types";
+
+export type DateType = Date | null;
 
 export type DateRangeType = {
   startDate: DateType;
   endDate: DateType;
 };
 
-export type DateValueType = DateRangeType | null;
+export type DateValueType = LibraryDateValueType;
