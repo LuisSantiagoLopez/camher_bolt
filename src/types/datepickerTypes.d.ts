@@ -1,4 +1,4 @@
-export type DateType = string | null;
+export type DateType = Date | string | null;
 
 export type DateRangeType = {
   startDate: DateType;

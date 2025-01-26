@@ -37,7 +37,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ updatePrevTools }) => {
     } catch (error) {
       console.error('Error creating user:', error);
       setStatusMessage(
-        `Error al registrar: ${error.errors?.[0]?.message || error.message || 'Error desconocido'}`
+        `Error al registrar: ${(error as any).errors?.[0]?.message || (error as any).message || 'Error desconocido'}`
       );
     } finally {
       setIsLoading(false);

@@ -42,7 +42,7 @@ export const DownloadFile: React.FC<DownloadFileProps> = ({
       // Trigger download after URL is set
       const link = document.createElement('a');
       link.href = generatedUrl;
-      link.download = filename;
+      link.download = filename || 'default_filename';
       link.click();
     } catch (error) {
       console.error(`Error fetching ${field}`, error);
@@ -55,9 +55,9 @@ export const DownloadFile: React.FC<DownloadFileProps> = ({
     switch (field) {
       case Field.invoice:
         return 'Descargar Factura';
-      case Field.counterReciept:
+      case Field.counterReceiptImg:
         return 'Descargar Contrarrecibo';
-      case Field.partApproval:
+      case Field.partApprovalImg:
         return 'Descargar Evidencia';
       default:
         return '';
@@ -68,7 +68,7 @@ export const DownloadFile: React.FC<DownloadFileProps> = ({
     switch (field) {
       case Field.invoice:
         return <AiFillFileText />;
-      case Field.counterReciept:
+      case Field.counterReceiptImg:
         return <AiOutlinePaperClip />;
       default:
         return <AiOutlineDownload />;
