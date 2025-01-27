@@ -1,8 +1,8 @@
 diff --git a/node_modules/maplibre-gl-js-amplify/lib/cjs/AmplifyGeofenceControl/AmplifyMapDraw.js b/node_modules/maplibre-gl-js-amplify/lib/cjs/AmplifyGeofenceControl/AmplifyMapDraw.js
-index 214cb0a..2b95178 100644
+index 214cb0a..159b213 100644
 --- a/node_modules/maplibre-gl-js-amplify/lib/cjs/AmplifyGeofenceControl/AmplifyMapDraw.js
 +++ b/node_modules/maplibre-gl-js-amplify/lib/cjs/AmplifyGeofenceControl/AmplifyMapDraw.js
-@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+@@ -4,10 +4,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
  };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.AmplifyMapDraw = void 0;
@@ -10,10 +10,23 @@ index 214cb0a..2b95178 100644
 -const maplibre_gl_draw_circle_1 = require("maplibre-gl-draw-circle");
 -const geofenceUtils_1 = require("../geofenceUtils");
 -const constants_1 = require("../constants");
-+const mapbox_gl_draw_1 = __importDefault(await import("@mapbox/mapbox-gl-draw"));
-+const maplibre_gl_draw_circle_1 = await import("maplibre-gl-draw-circle");
-+const geofenceUtils_1 = await import("../geofenceUtils");
-+const constants_1 = await import("../constants");
++let mapbox_gl_draw_1;
++let maplibre_gl_draw_circle_1;
++let geofenceUtils_1;
++let constants_1;
++
++(async () => {
++    try {
++        mapbox_gl_draw_1 = __importDefault(await import("@mapbox/mapbox-gl-draw"));
++        maplibre_gl_draw_circle_1 = await import("maplibre-gl-draw-circle");
++        geofenceUtils_1 = await import("../geofenceUtils");
++        constants_1 = await import("../constants");
++    } catch (error) {
++        console.error('Failed to load dependencies:', error);
++        throw error;
++    }
++})();
++
  class AmplifyMapDraw {
      constructor(map, ui) {
          this._mapBoxDraw = new mapbox_gl_draw_1.default({
