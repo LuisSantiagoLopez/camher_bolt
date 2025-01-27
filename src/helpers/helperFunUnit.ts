@@ -1,4 +1,4 @@
-import { API } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 
 import {
   UnitT as Unit,
@@ -26,15 +26,14 @@ export const createLinkedPart = async (unitID: string, tableID: string) => {
 
     console.log('Inputs to createPart:', { unitID: unitID, tableID });
 
-    const response = await API.graphql({
-      query: createPartNoProvider,
-      variables: {
+    const response = (await API.graphql(
+      graphqlOperation(createPartNoProvider, {
         input: {
           unitID,
           tableID,
         },
-      },
-    });
+      })
+    )) as { data: CreatePartMutation };
 
     const newPart = response as { data: CreatePartMutation };
 
