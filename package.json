@@ -21,6 +21,7 @@
     "framer-motion": "^10.12.2",
     "graphql-tag": "^2.12.6",
     "https": "^1.0.0",
+    "maplibre-gl-js-amplify": "^1.4.0",
     "mime-types": "^2.1.35",
     "next": "13.2.4",
     "react": "18.2.0",
