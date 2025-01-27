@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import Card from '@/components/ui/Card';
 import { useEffect, useState } from 'react';
 import { queryPartsForProvider } from '@/helpers/helperFunPart';
-import { PartT as Part } from '@/graphql';
+import { PartT as Part, ProviderT as Provider} from '@/graphql';
 import { queryProviderByEmail } from '@/helpers/helperFunProvider';
 import LoadingAnim from '@/components/ui/animations/loadingAnim';
 
@@ -29,6 +29,9 @@ function StatusScreenProvider({
     try {
       setIsLoading(true);
       const provider = await queryProviderByEmail(email);
+      if (!provider) {
+        throw new Error('Provider not found');
+      }
       const parts = await queryPartsForProvider(provider.id);
       setParts(parts);
     } catch (err) {

@@ -23,6 +23,9 @@ export default function ProviderDocs({ email, updatePrevTools }: ProviderDocsPro
       try {
         setIsLoading(true);
         const provider = await queryProviderByEmail(email);
+        if (!provider) {
+          throw new Error('Provider not found');
+        }
         const providerParts = await queryPartsForProvider(provider.id);
         setParts(providerParts.filter(part => part.invoiceImg || part.counterRecieptImg));
       } catch (err) {
@@ -67,7 +70,7 @@ export default function ProviderDocs({ email, updatePrevTools }: ProviderDocsPro
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {parts.map((part) => (
+              {parts.map((part) => part && (
                 <motion.div
                   key={part.id}
                   initial={{ opacity: 0 }}
@@ -96,7 +99,7 @@ export default function ProviderDocs({ email, updatePrevTools }: ProviderDocsPro
                         <span className="text-gray-700">Contrarecibo</span>
                         <DownloadFile
                           partID={part.id}
-                          field={Field.counterReciept}
+                          field={Field.counterReceiptImg}
                           small
                         />
                       </div>

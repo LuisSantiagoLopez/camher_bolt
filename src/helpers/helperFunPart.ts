@@ -188,8 +188,13 @@ export async function queryPartsForProvider(providerID: string) {
 
     // Filter out null items and sort by status
     return allParts.data.partsByProviderID.items
-      .filter((item): item is Part => item !== null)
-      .sort((a, b) => (a.status || 0) - (b.status || 0));
+    .filter((item): item is NonNullable<typeof item> & Part => 
+      item !== null && 
+      item.__typename === "Part" && 
+      'id' in item && 
+      'unitID' in item
+    )
+    .sort((a, b) => (a.status || 0) - (b.status || 0));
       
   } catch (error) {
     console.error('Error querying provider parts:', error);

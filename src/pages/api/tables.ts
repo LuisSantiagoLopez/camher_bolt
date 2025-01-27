@@ -119,8 +119,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const wsName = `Tabla ${table.id}`.slice(0, 31);
         const ws = wb.addWorksheet(wsName);
         const customFileWorkbook = new ExcelJS.Workbook();
-        await customFileWorkbook.xlsx.load(response);
+        await customFileWorkbook.xlsx.load(response as unknown as ExcelJS.Buffer);
         const customFileWorksheet = customFileWorkbook.getWorksheet(1); // Assuming it's the first worksheet
+
+        if (!customFileWorksheet) {
+          throw new Error('No worksheet found in the custom file');
+        }
 
         // Copy the contents of the fetched worksheet to the new worksheet
         customFileWorksheet.eachRow((row, rowNumber) => {

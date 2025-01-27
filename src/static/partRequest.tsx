@@ -60,7 +60,7 @@ export default function PartRequest({ handleButton1, partID, setPartID }: partPr
             if (partDescription && unitaryPrice && quantity) {
               const loadedParts = partDescription.map((desc, index) => ({
                 id: index + 1,
-                description: desc,
+                description: desc || '',
                 unitaryPrice: unitaryPrice[index] || 0,
                 quantity: quantity[index] || 1 // Ensure quantity is set with fallback to 1
               }));

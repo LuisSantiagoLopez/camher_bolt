@@ -553,13 +553,8 @@ function ProviderCard({
   }
 
   // In ProviderCard component:
-  const handleDateChange = (newValue: DateValueType) => {
-    if (newValue) {
-      setInvoiceDate({
-        startDate: newValue.startDate ? new Date(newValue.startDate) : null,
-        endDate: newValue.endDate ? new Date(newValue.endDate) : null,
-      });
-    }
+  const handleDateChange = (newValue: DateRangeType) => {
+    setInvoiceDate(newValue);
   };
 
   useEffect(() => {

@@ -11,6 +11,7 @@ import {
   partsByProviderID,
   PartsByProviderIDQuery,
 } from '@/graphql';
+import { uploadFileToS3 } from './s3';
 
 export async function updateStatus(status: number, partID: any) {
   try {

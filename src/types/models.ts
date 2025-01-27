@@ -1,4 +1,5 @@
 import { CognitoUser } from '@aws-amplify/auth';
+import { ModelPartConnection, ProviderT } from '@/graphql';
 
 export interface PartReq {
     partDescription?: string[];
@@ -50,41 +51,39 @@ export interface PartReq {
   
   export interface Provider {
     id: string;
-    emails?: string[];
-    name?: string;
-    Parts?: Part[];
-    createdAt?: string;
-    updatedAt?: string;
+    emails?: (string | null)[] | null; // Updated to allow nulls within the array
+    name?: string | null;
+    Parts?: Part[] | null;
+    createdAt: string; // Added as per GraphQL schema
+    updatedAt: string; // Added as per GraphQL schema
   }
   
   export interface Unit {
     id: string;
-    Parts?: Part[];
-    name?: string;
-    createdAt?: string;
-    updatedAt?: string;
+    Parts?: Part[] | null;
+    name?: string | null;
+    createdAt: string; // Added as per GraphQL schema
+    updatedAt: string; // Added as per GraphQL schema
   }
   
   export interface Part {
     id: string;
     unitID: string;
     Unit: Unit;
-    providerID?: string;
-    Provider?: Provider;
+    providerID?: string | null;
+    Provider?: Provider | null;
     tableID: string;
     Table: Table;
-    status?: number;
-    failureReport?: FailureReport;
-    workOrder?: WorkOrder;
-    mechanicReview?: MechanicReview;
-    partReq?: PartReq;
-    invoiceInfo?: InvoiceInfo;
-    reqDate?: string;
-    partApprovalImg?: string;
-    counterRecieptImg?: string;
-    invoiceImg?: string;
-    createdAt?: string;
-    updatedAt?: string;
+    status?: number | null;
+    failureReport?: FailureReport | null;
+    workOrder?: WorkOrder | null;
+    mechanicReview?: MechanicReview | null;
+    partReq?: PartReq | null;
+    invoiceInfo?: InvoiceInfo | null;
+    reqDate?: string | null;
+    partApprovalImg?: string | null;
+    counterRecieptImg?: string | null;
+    invoiceImg?: string | null;
   }
   
   export interface Table {

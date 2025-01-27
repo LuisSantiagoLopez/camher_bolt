@@ -1,7 +1,7 @@
 import Navigation from '#/InnerNavBar';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import { Table } from '@/types/models';
+import { TableT as APITableT } from '@/graphql/APITypes';
 import LoadingAnim from '@/components/ui/animations/loadingAnim';
 
 // Import types
@@ -22,14 +22,13 @@ type Props = {
 };
 
 function TableStatusScreen({ type }: Props): JSX.Element {
-  const { selectedTool, setSelectedTool, pastTools, setPastTools } =
-    useSelectedToolContext();
-  const [tables, setTables] = useState<TableT[]>([]);
-  const [inApprovalTables, setInApprovalTables] = useState<TableT[]>([]);
-  const [readyTables, setReadyTables] = useState<TableT[]>([]);
-  const [pastTables, setPastTables] = useState<TableT[]>([]);
+  const { selectedTool, setSelectedTool, pastTools, setPastTools } = useSelectedToolContext();
+  const [tables, setTables] = useState<APITableT[]>([]);
+  const [inApprovalTables, setInApprovalTables] = useState<APITableT[]>([]);
+  const [readyTables, setReadyTables] = useState<APITableT[]>([]);
+  const [pastTables, setPastTables] = useState<APITableT[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [chosenTable, setChosenTable] = useState<TableT>(tables[0]);
+  const [chosenTable, setChosenTable] = useState<APITableT | null>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -44,16 +43,20 @@ function TableStatusScreen({ type }: Props): JSX.Element {
       const pastTablesRes = await queryPastTables(); // Tables in status 3 are already approved by both contadores
 
       if (
-        inApprovalTablesRes == null ||
-        readyTablesRes == null ||
-        pastTablesRes == null
-      )
-        return;
-      setInApprovalTables(inApprovalTablesRes);
-      setReadyTables(readyTablesRes);
-      setPastTables(pastTablesRes);
-      setTables(inApprovalTablesRes);
-      setLoading(false);
+        !inApprovalTablesRes ||
+        !readyTablesRes ||
+        !pastTablesRes
+      ) {
+        setInApprovalTables([]);
+        setReadyTables([]);
+        setPastTables([]);
+        setTables([]);
+      } else {
+        setInApprovalTables(inApprovalTablesRes);
+        setReadyTables(readyTablesRes);
+        setPastTables(pastTablesRes);
+        setTables(inApprovalTablesRes);
+      }
     } catch (error) {
       console.error('Error fetching tables', error);
     } finally {
@@ -81,7 +84,7 @@ function TableStatusScreen({ type }: Props): JSX.Element {
     sessionStorage.setItem('currentTab', tabName);
   };
 
-  const handleClick = (t: Table) => {
+  const handleClick = (t: APITableT) => {
     setIsExpanded(!isExpanded);
     setChosenTable(t);
   };
@@ -111,12 +114,12 @@ function TableStatusScreen({ type }: Props): JSX.Element {
             middleButton="Listas"
             rightButton="Pasadas"
           />
-          {isExpanded ? (
+          {isExpanded && chosenTable ? (
             <CardTable
               handleBack={handleClick}
               table={chosenTable}
               type={type}
-              status={(chosenTable && chosenTable.status) || 0}
+              status={chosenTable.status || 0}
               flow={flow}
             />
           ) : (

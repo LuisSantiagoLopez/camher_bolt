@@ -19,8 +19,7 @@ export default function AutorizacionPartes({
   partID,
 }: buttonAndPartProps) {
   const [allProvider, setAllProvider] = useState<Provider[]>([]);
-  const [provider, setProvider] = useState<Provider>();
-  const [isUploadComplete, setIsUploadComplete] = useState(false);
+  const [provider, setProvider] = useState<Provider | undefined>(undefined);  const [isUploadComplete, setIsUploadComplete] = useState(false);
   const [existingImage, setExistingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,22 +43,19 @@ export default function AutorizacionPartes({
         }
 
         // Validate part has price information
-        if (!partData.partReq?.price) {
+        if (partData.partReq?.price == null) {
           throw new Error('La parte no tiene información de precio');
         }
 
         setPart(partData);
-        
-        // Load providers
-        const providers = await queryAllProvider();
-        if (!providers?.length) {
-          throw new Error('No se encontraron proveedores');
-        }
+
+        // 1. Query all providers
+        const providers = await queryAllProvider(); // returns ProviderT[]
         setAllProvider(providers);
-        
-        // Set provider if exists
+
+        // 2. If partData.Provider is set, use that
         if (partData.Provider) {
-          setProvider(partData.Provider);
+          setProvider(partData.Provider); 
         }
 
         // Check if image exists
@@ -73,9 +69,8 @@ export default function AutorizacionPartes({
           id: partData.id,
           price: partData.partReq.price,
           provider: partData.Provider?.name,
-          hasImage: !!partData.partApprovalImg
+          hasImage: !!partData.partApprovalImg,
         });
-
       } catch (err) {
         console.error('Error loading data:', err);
         setError(err instanceof Error ? err.message : 'Error cargando datos');
@@ -207,7 +202,7 @@ export default function AutorizacionPartes({
 
           {existingImage && (
             <div className="mb-4">
-              <DownloadFile partID={partID} field="partApproval" />
+              <DownloadFile partID={partID} field="partApprovalImg" />
             </div>
           )}
 
@@ -224,7 +219,7 @@ export default function AutorizacionPartes({
           options={allProvider}
           setOption={setProvider}
           className="mt-8 w-72 border border-black"
-          placeholder={provider ? provider.name : "Seleccionar proveedor..."}
+          placeholder={provider?.name || "Seleccionar proveedor..."}
         />
 
         <Button 
