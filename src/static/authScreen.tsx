@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { API } from 'aws-amplify';
-import { createProvider } from '@/graphql/mutations';
 import { useFlowContext } from '@/context/FlowContext';
 import { AuthScreenProps } from '@/types/cardTypes';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const AuthScreen: React.FC<AuthScreenProps> = ({ updatePrevTools }) => { 
   const { name, email, flow } = useFlowContext();
   const [statusMessage, setStatusMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const supabase = useSupabaseClient();
 
   const handleCreateUser = async () => {
     if (!name || !email) {
@@ -17,18 +17,20 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ updatePrevTools }) => {
 
     setIsLoading(true);
     try {
-      const input = {
-        name,
-        emails: [email],
-      };
+      // Insert the new provider into the providers table
+      const { data, error } = await supabase
+        .from('providers')
+        .insert([
+          { 
+            name: name,
+            emails: [email]
+          }
+        ])
+        .select()
+        .single();
 
-      // For now, we'll use createProvider since the other mutations aren't ready
-      const response = await API.graphql({
-        query: createProvider,
-        variables: { input },
-      });
+      if (error) throw error;
 
-      console.log('User created successfully:', response);
       setStatusMessage('Usuario registrado exitosamente.');
       
       // Return to action screen after successful registration
@@ -37,7 +39,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ updatePrevTools }) => {
     } catch (error) {
       console.error('Error creating user:', error);
       setStatusMessage(
-        `Error al registrar: ${(error as any).errors?.[0]?.message || (error as any).message || 'Error desconocido'}`
+        `Error al registrar: ${(error as Error).message || 'Error desconocido'}`
       );
     } finally {
       setIsLoading(false);

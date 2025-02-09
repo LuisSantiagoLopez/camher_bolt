@@ -4,13 +4,15 @@ import ActionScreen from '../reusable/actionScreen';
 import StatusScreen from '../reusable/statusScreen';
 import { useFlowContext } from '@/context/FlowContext';
 import AuthScreen from '@/static/authScreen';
+import RoleRequestsManager from '@/components/ui/RoleRequestsManager';
 
 const flow = {
   ActionScreen: {
-    description: 'Estás en el flujo de trabajo para el administrador. \n En este proceso puedes aprobar refacciones y pagos de contado.',
+    description: 'Estás en el flujo de trabajo para el administrador. \n En este proceso puedes aprobar refacciones, pagos de contado y solicitudes de rol.',
     button1Text: 'Aprobar refacciones',
     button2Text: 'Aprobar pagos de contado',
     button3Text: 'Registrarse como administrador',
+    button4Text: 'Gestionar solicitudes de rol',
   },
 };
 
@@ -39,6 +41,7 @@ export default function AdminFlow() {
                 button1Text={flow.ActionScreen.button1Text}
                 button2Text={flow.ActionScreen.button2Text}
                 button3Text={flow.ActionScreen.button3Text}
+                button4Text={flow.ActionScreen.button4Text}
                 handleButton1={() => {
                   updateTools('statusrefacciones');
                 }}
@@ -47,6 +50,9 @@ export default function AdminFlow() {
                 }}
                 handleButton3={() => {
                   updateTools('auth');
+                }}
+                handleButton4={() => {
+                  updateTools('rolerequests');
                 }}
               />
             </div>
@@ -65,6 +71,11 @@ export default function AdminFlow() {
       case 'auth':
         return (
           <AuthScreen updatePrevTools={updateTools} />
+        );
+
+      case 'rolerequests':
+        return (
+          <RoleRequestsManager />
         );
     }
   }

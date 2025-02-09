@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { Part } from '@/types/database';
+import { Part, PartWithRelations } from '@/types/database';
 import { uploadFileToS3 } from './s3';
 
 export async function updateStatus(status: number, partID: string): Promise<Part> {
@@ -20,7 +20,35 @@ export async function updateStatus(status: number, partID: string): Promise<Part
   }
 }
 
-export async function queryPart(partID: string): Promise<Part> {
+export const queryPartsForProvider = async (providerID: string): Promise<Part[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('parts')
+      .select(`
+        *,
+        unit:units(*),
+        provider:providers(*)
+      `)
+      .eq('providerID', providerID)
+      .eq('status', 9);
+
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error querying parts for provider:', error);
+    throw error;
+  }
+};
+
+export async function getUnitName(
+  part: PartWithRelations,
+  setUnitName: (name: string) => void
+) {
+  if (!part?.unit?.name) return;
+  setUnitName(part.unit.name);
+}
+
+export const queryPart = async (partID: string): Promise<PartWithRelations> => {
   try {
     const { data, error } = await supabase
       .from('parts')
@@ -39,7 +67,7 @@ export async function queryPart(partID: string): Promise<Part> {
     console.error('Error querying part:', error);
     throw error;
   }
-}
+};
 
 export async function queryPartsByRange(status: number, maxStatus: number): Promise<Part[]> {
   try {

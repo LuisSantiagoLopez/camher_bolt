@@ -1,6 +1,4 @@
-import { supabase } from '@/lib/supabase';
-import mime from 'mime-types';
-import { queryPart } from './helperFunPart';
+import { createClient } from '@/utils/supabase/client';
 
 export const enum Field {
   invoiceImg = 'invoiceImg',
@@ -19,7 +17,7 @@ export const uploadFileToS3 = async (
     throw new Error('No file selected');
   }
 
-  const mimeType = mime.lookup(selectedFile.name) as string;
+  const mimeType = selectedFile.type;
   if (!mimeType) {
     throw new Error('Could not determine file type');
   }
@@ -51,10 +49,11 @@ export const uploadFileToS3 = async (
     throw new Error('FileTypeNotAllowedException');
   }
 
-  const extension = mime.extension(mimeType) || 'dat';
+  const extension = mimeType.split('/')[1];
   const uploadKey = `${key}.${extension}`;
 
   try {
+    const supabase = createClient();
     const { data, error } = await supabase.storage
       .from('files')
       .upload(uploadKey, selectedFile, {
@@ -79,10 +78,17 @@ export async function fetchFileFromS3(
   }
 
   try {
-    const part = await queryPart(partID);
-    if (!part) {
-      throw new Error('Part not found');
-    }
+    const supabase = createClient();
+    
+    // Get part details
+    const { data: part, error: partError } = await supabase
+      .from('parts')
+      .select('*')
+      .eq('id', partID)
+      .single();
+
+    if (partError) throw partError;
+    if (!part) throw new Error('Part not found');
 
     let key;
     switch (field) {
@@ -113,7 +119,7 @@ export async function fetchFileFromS3(
       throw new Error('No data received from storage');
     }
 
-    const filename = `${key.split('/')[1]}`;
+    const filename = key.split('/').pop() || key;
 
     return { blob: data, filename };
   } catch (error) {

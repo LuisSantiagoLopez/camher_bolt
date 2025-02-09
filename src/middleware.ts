@@ -1,32 +1,53 @@
-import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
+import { Database } from '@/types/database';
 
-export async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
-  const supabase = createMiddlewareSupabaseClient({ req, res });
+export async function middleware(request: NextRequest) {
+  // Initialize a response object that you will update with cookies
+  let response = NextResponse.next({ request: { headers: request.headers } });
+  
+  const supabase = createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            // Set the cookie on the request if needed (depending on your framework)
+            // and on the response.
+            response.cookies.set(name, value, options);
+          });
+        },
+      },
+    }
+  );
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  // Get the user session
+  const { data: { user } } = await supabase.auth.getUser();
 
-  // If there's no session and we're not on the login page, redirect to login
-  if (!session && req.nextUrl.pathname !== '/login') {
-    const redirectUrl = req.nextUrl.clone();
+  // Redirect logic: if no user and not on the login page, redirect to /login
+  if (!user && request.nextUrl.pathname !== '/login') {
+    const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = '/login';
     return NextResponse.redirect(redirectUrl);
   }
-
-  // If we have a session and we're on the login page, redirect to home
-  if (session && req.nextUrl.pathname === '/login') {
-    const redirectUrl = req.nextUrl.clone();
+  
+  // If user is present and is on /login, redirect to home page
+  if (user && request.nextUrl.pathname === '/login') {
+    const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = '/';
     return NextResponse.redirect(redirectUrl);
   }
 
-  return res;
+  return response;
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    // Exclude static files and images from middleware processing
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ],
 };

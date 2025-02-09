@@ -1,35 +1,38 @@
-import * as XLSX from 'xlsx';
+import * as ExcelJS from 'exceljs';
 
+// Create a new Excel workbook and worksheet from array data
 export const createSheet = (name: string, data: any[][]) => {
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  const wb = XLSX.utils.book_new();
-
-  XLSX.utils.book_append_sheet(wb, ws, name);
-
-  XLSX.writeFile(wb, `${name}.xlsx`);
-
+  const wb = new ExcelJS.Workbook();
+  const ws = wb.addWorksheet(name);
+  
+  ws.addRows(data);
+  
+  wb.xlsx.writeFile(`${name}.xlsx`);
+  
   return wb;
 };
 
+// Create a blob from array data for Excel file
 export const createBlobSheet = (name: string, data: any[][]) => {
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  const wb = XLSX.utils.book_new();
-
-  XLSX.utils.book_append_sheet(wb, ws, name);
-
-  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-
-  return new Blob([wbout], { type: 'application/octet-stream' });
+  const wb = new ExcelJS.Workbook();
+  const ws = wb.addWorksheet(name);
+  
+  ws.addRows(data);
+  
+  return wb.xlsx.writeBuffer().then(buffer => {
+    return new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  });
 };
 
+// Helper function to download a blob as an Excel file
 const downloadBlobAsXlsx = (blob: Blob, filename: string) => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.style.display = 'none'; // Hide the element
+  a.style.display = 'none';
   a.href = url;
   a.download = filename.endsWith('.xlsx') ? filename : `${filename}.xlsx`;
 
-  document.body.appendChild(a); // Required for Firefox
+  document.body.appendChild(a);
   a.click();
 
   setTimeout(() => {
@@ -38,9 +41,8 @@ const downloadBlobAsXlsx = (blob: Blob, filename: string) => {
   }, 100);
 };
 
-export async function getPartTableBlob(
-  partIDs: string[],
-): Promise<Blob | null> {
+// Get part table data and download as Excel
+export async function getPartTableBlob(partIDs: string[]): Promise<Blob | null> {
   try {
     const res = await fetch('api/parts', {
       method: 'POST',
@@ -62,13 +64,11 @@ export async function getPartTableBlob(
     const a = document.createElement('a');
     a.href = url;
     a.download = 'parts.xlsx';
-    a.style.display = 'none'; // Hide the link
+    a.style.display = 'none';
     document.body.appendChild(a);
 
-    // Trigger the download
     a.click();
 
-    // Clean up
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
     return blob;
@@ -78,6 +78,7 @@ export async function getPartTableBlob(
   }
 }
 
+// Get table data and download as Excel
 export async function getTableBlob(tableIDs: string[]): Promise<Blob | null> {
   try {
     const res = await fetch('api/tables', {

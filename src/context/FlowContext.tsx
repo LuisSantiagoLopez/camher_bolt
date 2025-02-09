@@ -45,28 +45,34 @@ export const FlowContextProvider = ({
       }
 
       try {
-        // Get user's role from user_roles view
-        const { data: userRole, error: roleError } = await supabase
+        // First try to get the user's role
+        const { data: userRoles, error: roleError } = await supabase
           .from('user_roles')
           .select('role')
-          .eq('user_id', session.user.id)
-          .single();
+          .eq('user_id', session.user.id);
 
-        if (roleError) throw roleError;
-
-        // Set flow based on role
-        const role = userRole?.role;
-        switch (role) {
-          case 'taller':
-          case 'admin':
-          case 'contador':
-          case 'contaduria':
-          case 'operador':
-          case 'proveedor':
-            setFlow(role);
-            break;
-          default:
-            setFlow('');
+        if (roleError) {
+          console.error('Error fetching user role:', roleError);
+          setFlow('default');
+        } else if (!userRoles || userRoles.length === 0) {
+          // No role found, set to default
+          console.log('No role found for user, setting default');
+          setFlow('default');
+        } else {
+          // Set flow based on role
+          const role = userRoles[0].role;
+          switch (role) {
+            case 'taller':
+            case 'admin':
+            case 'contador':
+            case 'contaduria':
+            case 'operador':
+            case 'proveedor':
+              setFlow(role);
+              break;
+            default:
+              setFlow('default');
+          }
         }
 
         // Set user info
@@ -82,7 +88,7 @@ export const FlowContextProvider = ({
 
       } catch (error) {
         console.error('Error fetching user data:', error);
-        setFlow('');
+        setFlow('default');
       }
     };
 
