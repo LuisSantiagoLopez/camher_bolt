@@ -3,10 +3,6 @@ import { useState, useEffect } from 'react';
 import { useSupabaseClient } from '@/utils/supabase/useSupabaseClient';
 import Logo from '@/components/ui/Logo';
 
-/**
- * A simple login page that implements email/password authentication.
- * You can later extend this to support OAuth as needed.
- */
 export default function Login() {
   const supabase = useSupabaseClient();
   const [redirectTo, setRedirectTo] = useState<string>('');
@@ -16,41 +12,66 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // Set redirect URL on the client side
     setRedirectTo(window.location.origin + '/');
   }, []);
 
-  // Handle sign-in
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) {
-      setMessage(`Error: ${error.message}`);
-    } else {
-      // Redirect if sign in successful (you may want to use router.push)
-      window.location.href = redirectTo;
+    
+    try {
+      console.log('Attempting sign in with:', { email });
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      console.log('Sign in response:', { data, error });
+
+      if (error) {
+        setMessage(`Error: ${error.message}`);
+        console.error('Sign in error details:', error);
+      } else {
+        window.location.href = redirectTo;
+      }
+    } catch (err) {
+      console.error('Unexpected error during sign in:', err);
+      setMessage(`Unexpected error: ${(err as Error).message}`);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
-  // Handle sign-up (if desired)
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    if (error) {
-      setMessage(`Error: ${error.message}`);
-    } else {
-      setMessage('Sign-up successful! Check your email for a confirmation link.');
+    
+    try {
+      console.log('Attempting sign up with:', { email });
+      
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectTo
+        }
+      });
+
+      console.log('Sign up response:', { data, error });
+
+      if (error) {
+        setMessage(`Error: ${error.message}`);
+        console.error('Sign up error details:', error);
+      } else {
+        setMessage('Sign-up successful! Check your email for a confirmation link.');
+      }
+    } catch (err) {
+      console.error('Unexpected error during sign up:', err);
+      setMessage(`Unexpected error: ${(err as Error).message}`);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
@@ -75,6 +96,7 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-3 border rounded"
             required
+            minLength={6}
           />
           <button
             type="submit"
@@ -94,7 +116,11 @@ export default function Login() {
           </button>
         </div>
         {message && (
-          <div className="mt-4 p-4 rounded bg-gray-100 text-gray-800">
+          <div className={`mt-4 p-4 rounded ${
+            message.toLowerCase().includes('error') 
+              ? 'bg-red-100 text-red-700' 
+              : 'bg-green-100 text-green-700'
+          }`}>
             {message}
           </div>
         )}
