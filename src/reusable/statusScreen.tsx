@@ -5,7 +5,7 @@ import React from 'react';
 import Card from '@/components/ui/Card';
 import { useEffect } from 'react';
 import { queryPartsByRange, queryPartsByStatus } from '@/helpers/helperFunPart';
-import { PartT as Part } from '@/graphql';
+import { Part } from '@/types/database';
 import LoadingAnim from '@/components/ui/animations/loadingAnim';
 
 interface StatusProps {

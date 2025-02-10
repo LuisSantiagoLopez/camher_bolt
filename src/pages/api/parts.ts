@@ -1,10 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import * as ExcelJS from 'exceljs';
-import { API, Amplify } from 'aws-amplify';
-import config from '@/aws-exports';
-import { GetPartQuery, Part, getPart } from '@/graphql';
-
-Amplify.configure({ ...config, ssr: true });
+import { createClient } from '@/utils/supabase/server';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -80,31 +76,28 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     { width: 15 }, // G
   ];
 
-  let currentRow = 1;
+  try {
+    const supabase = await createClient();
 
-  // Sort parts by date
-  const parts = await Promise.all(
-    partIDs.map(async (id) => {
-      const partRes = (await API.graphql({
-        query: getPart,
-        variables: { id },
-      })) as { data: GetPartQuery };
-      return partRes.data.getPart as Part;
-    })
-  );
+    // Fetch all parts with their related data
+    const { data: parts, error: partsError } = await supabase
+      .from('parts')
+      .select(`
+        *,
+        unit:units(*),
+        provider:providers(*)
+      `)
+      .in('id', partIDs)
+      .order('reqDate', { ascending: false });
 
-  const sortedParts = parts
-    .filter(part => part)
-    .sort((a, b) => {
-      const dateA = new Date(a.reqDate || '').getTime();
-      const dateB = new Date(b.reqDate || '').getTime();
-      return dateB - dateA;
-    });
+    if (partsError) throw partsError;
+    if (!parts) throw new Error('No parts found');
 
-  for (const part of sortedParts) {
-    try {
+    let currentRow = 1;
+
+    for (const part of parts) {
       const { reqDate, failureReport, partReq, workOrder } = part;
-      const unitName = part.Unit.name;
+      const unitName = part.unit?.name;
       const {
         operator,
         problemLocation,
@@ -237,7 +230,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         });
         currentRow++;
 
-        partDescription.forEach((desc, index) => {
+        partDescription.forEach((desc: any, index: number) => {
           const row = sheet.getRow(currentRow);
           [
             desc || '',
@@ -260,17 +253,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       sheet.addRow([]);
       sheet.addRow([]);
       currentRow += 2;
-
-    } catch (error) {
-      console.error('Error processing part:', error);
     }
-  }
 
-  try {
     const buffer = await wb.xlsx.writeBuffer();
     res.setHeader(
       'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     );
     res.setHeader('Content-Disposition', 'attachment; filename=Partes.xlsx');
     res.send(buffer);

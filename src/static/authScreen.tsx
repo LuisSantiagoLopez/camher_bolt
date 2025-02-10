@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useFlowContext } from '@/context/FlowContext';
 import { AuthScreenProps } from '@/types/cardTypes';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient } from '@/utils/supabase/useSupabaseClient';
 
 const AuthScreen: React.FC<AuthScreenProps> = ({ updatePrevTools }) => { 
   const { name, email, flow } = useFlowContext();

@@ -5,7 +5,7 @@ import { IconContext } from 'react-icons';
 import TextInput from '#/TextInput';
 import Button from '#/Button';
 import { createNewUnit, queryAllUnits } from '@/helpers/helperFunUnit';
-import { UnitT as Unit } from '@/graphql';
+import { Unit } from '@/types/database';
 
 interface UnitCreationProps {
   handleButton1: () => void;

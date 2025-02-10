@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CollapsedCard from '@/components/ui/CollapsedCard';
 import { queryPartsByRange } from '@/helpers/helperFunPart';
-import { PartT as Part } from '@/graphql';
+import { Part } from '@/types/database';
 
 const PendingPartPage = () => {
   const [parts, setParts] = useState<Part[]>([]);

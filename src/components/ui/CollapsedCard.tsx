@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { PartT as Part } from '@/graphql';
+import { Part, PartWithRelations } from '@/types/database';
 import { getUnitName } from '@/helpers/helperFunPart';
 
 import { fetchFileFromS3 } from '@/helpers/s3';
 
 type Props = {
-  handleClick: (unit: Part) => void;
+  handleClick: (unit: PartWithRelations) => void;
   isActive?: boolean;
-  part: Part;
+  part: PartWithRelations;
   key: string;
 };
 
@@ -77,9 +77,15 @@ export default function ({ handleClick, part, isActive }: Props) {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: 'easeInOut' }}
-      id="card"
-      className={`mx-auto max-w-[50%] border-[4px] bg-black p-8 md:min-w-[25%] lg:min-w-[20%] border-${statusColorWrapper} my-2 rounded-3xl md:mx-6 `}
-    >
+      style={{
+        margin: '0.5rem auto',
+        maxWidth: '50%',
+        border: '4px solid',
+        borderColor: statusColorWrapper,
+        backgroundColor: 'black',
+        padding: '2rem',
+        borderRadius: '1.5rem',
+      }} >
       <div
         id="mainContainer"
         className="flex flex-col items-center space-y-4 md:flex-row md:space-x-10 md:space-y-0"
@@ -112,14 +118,15 @@ export default function ({ handleClick, part, isActive }: Props) {
           <span className="mb-4 overflow-ellipsis text-lg font-light text-gray-300 md:text-lg lg:text-lg">
             {part?.partReq?.partDescription}
           </span>
-          <motion.div
-            className={`mb-6 p-4 text-sm text-white hover:cursor-pointer hover:text-black md:text-base lg:text-lg hover:bg-${statusColorWrapper} mt-4 w-full rounded-md bg-neutral-600 text-center md:w-[40%]`}
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2, ease: 'easeInOut' }}
-            onClick={handleCardClick}
-          >
-            <p className="font-bold">{isActive ? 'REVISAR' : 'VER MAS'}</p>
-          </motion.div>
+          <div onClick={handleCardClick}>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+              style={{ marginBottom: '1.5rem', padding: '1rem', fontSize: '0.875rem', color: 'white', cursor: 'pointer', textAlign: 'center', width: '100%', borderRadius: '0.375rem', backgroundColor: '#4a5568' }}
+            >
+              <p className="font-bold">{isActive ? 'REVISAR' : 'VER MAS'}</p>
+            </motion.div>
+          </div>
           <div
             id="cardID"
             className="flex flex-col justify-center self-end rounded-md bg-camhergreen px-3"

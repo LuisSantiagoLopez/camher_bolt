@@ -11,7 +11,7 @@ import {
 } from '@/helpers/helperFunPart';
 import ProviderQueryDropdown from '@/components/ui/ProviderQueryDropdown';
 import { queryAllProvider } from '@/helpers/helperFunProvider';
-import { ProviderT as Provider, PartT as Part } from '@/graphql';
+import { Provider, Part } from '@/types/database';
 import { DownloadFile } from '@/components/ui/DownloadFile';
 
 export default function AutorizacionPartes({
@@ -54,8 +54,8 @@ export default function AutorizacionPartes({
         setAllProvider(providers);
 
         // 2. If partData.Provider is set, use that
-        if (partData.Provider) {
-          setProvider(partData.Provider); 
+        if (partData.provider) {
+          setProvider(partData.provider); 
         }
 
         // Check if image exists
@@ -68,7 +68,7 @@ export default function AutorizacionPartes({
         console.log('Part data loaded successfully:', {
           id: partData.id,
           price: partData.partReq.price,
-          provider: partData.Provider?.name,
+          provider: partData.provider?.name,
           hasImage: !!partData.partApprovalImg,
         });
       } catch (err) {

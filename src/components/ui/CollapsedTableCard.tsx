@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { TableT } from '@/graphql';
+import { Table } from '@/types/database';
 
 type Props = {
-  handleClick: (unit: TableT) => void;
+  handleClick: (unit: Table) => void;
   isActive?: boolean;
-  table: TableT;
+  table: Table;
   key: string;
 };
 

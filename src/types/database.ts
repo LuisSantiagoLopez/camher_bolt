@@ -4,6 +4,8 @@ export interface Database {
     Tables: {
       parts: {
         Row: {
+          provider: any
+          unit: any
           id: string
           status: number
           reqDate: string
@@ -39,8 +41,8 @@ export interface Database {
             subTotal: number | null
           } | null
         }
-        Insert: Omit<Tables['parts']['Row'], 'id' | 'createdAt' | 'updatedAt'>
-        Update: Partial<Tables['parts']['Row']>
+        Insert: Omit<Database['public']['Tables']['parts']['Row'], 'id' | 'createdAt' | 'updatedAt'>
+        Update: Partial<Database['public']['Tables']['parts']['Row']>
       }
       units: {
         Row: {
@@ -48,8 +50,8 @@ export interface Database {
           name: string
           createdAt: string
         }
-        Insert: Omit<Tables['units']['Row'], 'id' | 'createdAt'>
-        Update: Partial<Tables['units']['Row']>
+        Insert: Omit<Database['public']['Tables']['units']['Row'], 'id' | 'createdAt'>
+        Update: Partial<Database['public']['Tables']['units']['Row']>
       }
       providers: {
         Row: {
@@ -58,11 +60,12 @@ export interface Database {
           emails: string[]
           createdAt: string
         }
-        Insert: Omit<Tables['providers']['Row'], 'id' | 'createdAt'>
-        Update: Partial<Tables['providers']['Row']>
+        Insert: Omit<Database['public']['Tables']['providers']['Row'], 'id' | 'createdAt'>
+        Update: Partial<Database['public']['Tables']['providers']['Row']>
       }
       tables: {
         Row: {
+          Parts: any
           id: string
           status: number
           type: 'CURRENT' | 'HISTORY'
@@ -71,11 +74,22 @@ export interface Database {
           customFile: string | null
           createdAt: string
         }
-        Insert: Omit<Tables['tables']['Row'], 'id' | 'createdAt'>
-        Update: Partial<Tables['tables']['Row']>
+        Insert: Omit<Database['public']['Tables']['tables']['Row'], 'id' | 'createdAt'>
+        Update: Partial<Database['public']['Tables']['tables']['Row']>
       }
     }
   }
+}
+
+
+// Add to types/database.ts
+export interface PartWithRelations extends Part {
+  unit: Unit;
+  provider: Provider | null;
+}
+
+export interface TableWithRelations extends Table {
+  parts: Part[];
 }
 
 // Type aliases for easier usage

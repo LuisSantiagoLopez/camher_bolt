@@ -1,11 +1,11 @@
 // ProviderQueryDropdown.tsx
 
 import React from 'react';
-import { ProviderT } from '@/graphql';
+import { Provider } from '@/types/database';
 
 interface ProviderQueryDropdownProps {
-  options: ProviderT[];  // or some narrower interface if needed
-  setOption: React.Dispatch<React.SetStateAction<ProviderT | undefined>>;
+  options: Provider[];  // or some narrower interface if needed
+  setOption: React.Dispatch<React.SetStateAction<Provider | undefined>>;
   className?: string;
   placeholder?: string;
 }

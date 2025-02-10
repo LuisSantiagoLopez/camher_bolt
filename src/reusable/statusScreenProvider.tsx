@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import Card from '@/components/ui/Card';
 import { useEffect, useState } from 'react';
 import { queryPartsForProvider } from '@/helpers/helperFunPart';
-import { PartT as Part, ProviderT as Provider} from '@/graphql';
+import { Part, Provider } from '@/types/database';
 import { queryProviderByEmail } from '@/helpers/helperFunProvider';
 import LoadingAnim from '@/components/ui/animations/loadingAnim';
 

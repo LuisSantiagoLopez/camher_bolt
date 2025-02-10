@@ -1,7 +1,3 @@
-// Before (possibly using auth-helpers)
-// import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
-
-// After:
 import { createBrowserClient } from '@supabase/ssr';
 
 export function createClient() {

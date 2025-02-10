@@ -4,7 +4,7 @@ import { createBrowserClient } from '@supabase/ssr';
 
 /**
  * Custom hook to initialize the Supabase client on the browser.
- * This hook creates the client only once and returns it.
+ * This client is created only once.
  */
 export function useSupabaseClient() {
   const [client] = useState(() =>

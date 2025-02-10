@@ -1,5 +1,5 @@
 import React from 'react';
-import { UnitT as Unit } from '@/graphql';
+import { Unit } from '@/types/database';
 
 interface UnitQueryDropdownProps {
   options: Unit[];
